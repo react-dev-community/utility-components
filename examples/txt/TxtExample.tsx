@@ -23,7 +23,7 @@ const Child: React.FC<any> = () => {
   return (
     <Container centered grow>
       <Txt type="subtitle">Text 1</Txt>
-      <Txt type="subtitle" style={{ color: 'red' }}>
+      <Txt type="subtitle" style={{ color: 'blue' }}>
         Text 2
       </Txt>
       <Txt type="heading">Text 3</Txt>
