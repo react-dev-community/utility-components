@@ -1,7 +1,6 @@
+import { Theme } from './types/index';
 import React from 'react';
 
-interface ThemeContextType {}
-
-const ThemeContext = React.createContext<any>({});
+const ThemeContext = React.createContext<Theme>({});
 
 export default ThemeContext;

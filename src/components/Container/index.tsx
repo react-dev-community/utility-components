@@ -1,6 +1,8 @@
 import React from 'react';
 import { FlexAlignType, FlexStyle, View, ViewProps } from 'react-native';
 import { FlexDirectionType, FlexJustifyType } from '../../types';
+import { vou } from '../../utils';
+import { isNumber, isString } from 'lodash';
 
 interface Props extends ViewProps {
   justify?: FlexJustifyType;
@@ -25,20 +27,17 @@ const Container: React.FC<Props> = ({
 }) => {
   const { style, ...restProps } = props;
 
-  // We will have lot of such optional object creations based on props
-  // We will need some effient way or better way to handle this.
-
   const flexStyle: FlexStyle = {
-    justifyContent: justify || (centered ? 'center' : undefined),
-    alignItems: alignItems || (centered ? 'center' : undefined),
-    flexDirection: direction || (row ? 'row' : 'column'),
+    justifyContent: justify || vou(centered, 'center'),
+    alignItems: alignItems || vou(centered, 'center'),
+    flexDirection: direction || vou(row, 'row'),
+    flex: isNumber(grow) ? grow : 1,
     ...(border
       ? {
           borderWidth: 1,
-          borderColor: typeof border === 'string' ? border : undefined,
+          borderColor: vou(isString(border), border),
         }
       : {}),
-    flex: typeof grow === 'number' ? grow : 1,
   };
 
   return (

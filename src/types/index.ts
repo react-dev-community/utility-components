@@ -1,5 +1,7 @@
 // Styles
 
+import { StyleProp, TextStyle } from 'react-native';
+
 export type FlexJustifyType =
   | 'flex-start'
   | 'flex-end'
@@ -13,3 +15,5 @@ export type FlexDirectionType =
   | 'column'
   | 'row-reverse'
   | 'column-reverse';
+
+export type TxtSty = StyleProp<TextStyle>;

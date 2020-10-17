@@ -6,8 +6,8 @@ import Txt from '../../src/components/Txt';
 // Parent
 const themeValue = createTheme({
   text: {
-    styles: { subtitle: { fontSize: 20, color: '#444' } },
-    props: { onPress: () => console.log('This is great') },
+    subtitle: { fontSize: 20, color: '#444' },
+    heading: { fontSize: 24, color: '#666' },
   },
 });
 
@@ -26,6 +26,7 @@ const Child: React.FC<any> = () => {
       <Txt type="subtitle" style={{ color: 'red' }}>
         Text 2
       </Txt>
+      <Txt type="heading">Text 3</Txt>
     </Container>
   );
 };

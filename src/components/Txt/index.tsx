@@ -9,18 +9,12 @@ interface Props extends TextProps {
 
 const Txt: React.FC<Props> = ({ type, children, ...props }) => {
   const theme = useTheme();
-
-  const themeProps = get(theme, 'text.props', {});
-  const themeStyle = get(theme, `text.styles.${type}`, {});
+  const themeStyle = get(theme, `text.${type}`, {});
 
   const { style = {}, ...restProps } = props;
 
   return (
-    <Text
-      {...themeProps}
-      {...restProps}
-      style={{ ...themeStyle, ...(style as {}) }}
-    >
+    <Text {...restProps} style={{ ...themeStyle, ...(style as {}) }}>
       {children}
     </Text>
   );
