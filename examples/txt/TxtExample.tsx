@@ -1,7 +1,5 @@
 import React from 'react';
-import { createTheme, ThemeProvider } from '../../src';
-import { Container } from '../../src/components';
-import Txt from '../../src/components/Txt';
+import { Container, createTheme, ThemeProvider, Txt } from '../../src';
 
 // Parent
 const themeValue = createTheme({
@@ -11,6 +9,12 @@ const themeValue = createTheme({
     default: { fontSize: 16, color: '#888', fontWeight: 'bold' },
   },
 });
+
+declare module '../../src/components/Txt' {
+  interface TxtProps {
+    type?: keyof NonNullable<typeof themeValue.text>;
+  }
+}
 
 const TxtExample = () => {
   return (

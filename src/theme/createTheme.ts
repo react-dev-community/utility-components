@@ -1,6 +1,6 @@
 import { Theme } from './types';
 
-const createTheme = (theme: Theme) => {
+const createTheme = <T = any>(theme: Theme<T>) => {
   return theme;
 };
 

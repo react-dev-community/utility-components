@@ -3,12 +3,11 @@ import { Text, TextProps } from 'react-native';
 import { useTheme } from '../../theme';
 import { get } from 'lodash';
 
-interface Props extends TextProps {
-  type?: string;
-}
+export interface TxtProps extends TextProps {}
 
-const Txt: React.FC<Props> = ({ type, children, ...props }) => {
+const Txt: React.FC<TxtProps> = ({ children, ...props }) => {
   const theme = useTheme();
+  const type = (props as any).type;
   const themeStyle = get(theme, `text.${type}`, {});
 
   // If variant is present ignore default
