@@ -8,6 +8,7 @@ const themeValue = createTheme({
   text: {
     subtitle: { fontSize: 20, color: '#444' },
     heading: { fontSize: 24, color: '#666' },
+    default: { fontSize: 16, color: '#888', fontWeight: 'bold' },
   },
 });
 
@@ -22,11 +23,12 @@ const TxtExample = () => {
 const Child: React.FC<any> = () => {
   return (
     <Container centered grow>
-      <Txt type="subtitle">Text 1</Txt>
+      <Txt>Default Text</Txt>
+      <Txt type="subtitle">Subtitle Text</Txt>
       <Txt type="subtitle" style={{ color: 'blue' }}>
-        Text 2
+        Subtitle Text overide
       </Txt>
-      <Txt type="heading">Text 3</Txt>
+      <Txt type="heading">Heading Text</Txt>
     </Container>
   );
 };

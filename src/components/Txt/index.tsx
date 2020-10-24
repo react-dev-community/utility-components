@@ -11,10 +11,16 @@ const Txt: React.FC<Props> = ({ type, children, ...props }) => {
   const theme = useTheme();
   const themeStyle = get(theme, `text.${type}`, {});
 
+  // If variant is present ignore default
+  const defaultThemeStyle = type ? {} : get(theme, 'text.default', {});
+
   const { style = {}, ...restProps } = props;
 
   return (
-    <Text {...restProps} style={{ ...themeStyle, ...(style as {}) }}>
+    <Text
+      {...restProps}
+      style={{ ...defaultThemeStyle, ...themeStyle, ...(style as {}) }}
+    >
       {children}
     </Text>
   );
