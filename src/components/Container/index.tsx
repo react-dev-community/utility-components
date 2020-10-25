@@ -4,7 +4,8 @@ import { FlexDirectionType, FlexJustifyType } from '../../types';
 import { vou } from '../../utils';
 import { isNumber, isString } from 'lodash';
 
-interface Props extends ViewProps {
+export interface ContainerProps extends ViewProps {
+  variant?: string;
   justify?: FlexJustifyType;
   alignItems?: FlexAlignType;
   direction?: FlexDirectionType;
@@ -14,7 +15,7 @@ interface Props extends ViewProps {
   grow?: number | boolean;
 }
 
-const Container: React.FC<Props> = ({
+const Container: React.FC<ContainerProps> = ({
   children,
   alignItems,
   direction,
@@ -39,6 +40,8 @@ const Container: React.FC<Props> = ({
         }
       : {}),
   };
+
+  // Add code to extract theme style variant of container (refer Txt)
 
   return (
     <View style={{ ...flexStyle, ...(style as {}) }} {...restProps}>
