@@ -10,12 +10,6 @@ const themeValue = createTheme({
   },
 });
 
-declare module '../../src/components/Txt' {
-  interface TxtProps {
-    type?: keyof NonNullable<typeof themeValue.text>;
-  }
-}
-
 const TxtExample = () => {
   return (
     <ThemeProvider theme={themeValue}>
@@ -28,11 +22,11 @@ const Child: React.FC<any> = () => {
   return (
     <Container centered grow>
       <Txt>Default Text</Txt>
-      <Txt type="subtitle">Subtitle Text</Txt>
-      <Txt type="subtitle" style={{ color: 'blue' }}>
+      <Txt variant="subtitle">Subtitle Text</Txt>
+      <Txt variant="subtitle" style={{ color: 'blue' }}>
         Subtitle Text overide
       </Txt>
-      <Txt type="heading">Heading Text</Txt>
+      <Txt variant="heading">Heading Text</Txt>
     </Container>
   );
 };

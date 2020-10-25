@@ -17,3 +17,5 @@ export type FlexDirectionType =
   | 'column-reverse';
 
 export type TxtSty = StyleProp<TextStyle>;
+
+export type VariantTypes<T> = keyof NonNullable<T>;
