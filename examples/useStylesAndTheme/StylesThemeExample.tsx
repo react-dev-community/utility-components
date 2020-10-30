@@ -32,7 +32,7 @@ const Child = () => {
     <Container centered grow row>
       <Txt style={styles.text1}>Text1</Txt>
       <Txt style={styles.text2}>Text2</Txt>
-      <Txt style={theme.text.variant1}>Text3</Txt>
+      <Txt style={theme.text?.variant1}>Text3</Txt>
     </Container>
   );
 };
