@@ -1,61 +1,53 @@
+import { Entypo } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
+  StyleSheet,
   TextInput,
   TextInputProps,
-  View,
-  TouchableWithoutFeedback,
-  StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
+import Password from "./Password";
 import { useTheme } from "../../theme";
-
-import { Entypo } from "@expo/vector-icons";
+import { get } from "lodash";
 
 interface Props extends TextInputProps {
-  //type?: string;
-  //value?: string | undefined;
   type?: "password";
+  show?: boolean | undefined;
+  variant?: string;
+  outlined?: boolean | undefined;
 }
 
-const Input: React.FC<Props> = ({ type, ...rest }) => {
-  const [toShow, setToShow] = useState<boolean>(false);
+const Input: React.FC<Props> = ({ type, variant, outlined, ...rest }) => {
+  const theme = useTheme();
 
-  return (
-    <View style={styles.outerContainer}>
-      <TextInput
-        {...rest}
-        // textContentType={}
-        secureTextEntry={type === "password" && (!toShow ? true : false)}
-      />
-      {type === "password" && (
-        <TouchableOpacity
-          style={styles.innerContainer}
-          onPress={() => setToShow((prevState) => !prevState)}
-        >
-          <Entypo name={toShow ? "eye-with-line" : "eye"} size={17} />
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+  const variantValue = variant;
+  const themeStyle = get(theme, `text.${variantValue}`, {});
+
+  // If variant is present ignore default
+  const defaultThemeStyle = variantValue ? {} : get(theme, "input.default", {});
+
+  const { style = {}, ...restProps } = rest;
+
+  let Component;
+  switch (type) {
+    case "password":
+      Component = (
+        <Password
+          style={{ ...defaultThemeStyle, ...themeStyle, ...(style as {}) }}
+          outlined={outlined}
+          {...restProps}
+        />
+      );
+      break;
+
+    default:
+      break;
+  }
+
+  return Component;
 };
 
-const styles = StyleSheet.create({
-  outerContainer: {
-    position: "relative",
-    // backgroundColor: "green",
-    // height: 100,
-    // width: 200,
-    paddingHorizontal: 35,
-  },
-
-  innerContainer: {
-    position: "absolute",
-    // justifyContent: "center",
-    top: 0,
-    right: 0,
-
-    // backgroundColor: "pink",
-  },
-});
+const styles = StyleSheet.create({});
 
 export default Input;
