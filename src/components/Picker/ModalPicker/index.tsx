@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from 'react-native';
+import { Modal, TouchableOpacity } from 'react-native';
 import Container from '../../Container';
 import PickerButton from '../PickerButton';
 
@@ -8,22 +8,44 @@ interface ModalPickerProps<T = { title: string; value: string }> {
   PickerComponent: React.FC<{ option: T }>;
 }
 
-const ModalPicker: React.FC<ModalPickerProps> = ({
-  options,
-  PickerComponent,
-}) => {
+const useModalPicker = () => {
   const [visible, setVisible] = useState(false);
+  const [index, setIndex] = useState(0);
 
+  return {
+    visible,
+    setVisible,
+    index,
+    setIndex,
+  };
+};
+
+const ModalPicker: React.FC<
+  ModalPickerProps & ReturnType<typeof useModalPicker>
+> = ({ options, PickerComponent, index, setVisible, visible, setIndex }) => {
   return (
-    <Modal visible={visible} onRequestClose={() => setVisible(false)}>
-      <Container>
-        <PickerButton />
-        {options.map((option) => (
-          <PickerComponent option={option} />
-        ))}
-      </Container>
-    </Modal>
+    <>
+      <PickerButton
+        handlePress={() => setVisible(true)}
+        title={options[index].title}
+      />
+      <Modal visible={visible} onRequestClose={() => setVisible(false)}>
+        <Container>
+          {options.map((option, idx) => (
+            <TouchableOpacity
+              onPress={() => {
+                setIndex(idx);
+                setVisible(false);
+              }}
+              key={idx}
+            >
+              <PickerComponent option={option} />
+            </TouchableOpacity>
+          ))}
+        </Container>
+      </Modal>
+    </>
   );
 };
 
-export default ModalPicker;
+export { ModalPicker, useModalPicker };
