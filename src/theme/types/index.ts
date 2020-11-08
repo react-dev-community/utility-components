@@ -1,21 +1,11 @@
 import { TextStyle, ViewStyle } from 'react-native';
+import { PickerThemeOverrideProps } from './../../components/Picker/ModalPicker/types';
 
 type VariantType<P, T = any> = { [K in keyof T]: P } & { default?: P };
 
 type ButtonStyleProps = any;
 type ContainerStyleProps = ViewStyle;
 type InputStyleProps = any;
-
-interface PickerProps {
-  PickerComponent: React.FC<{
-    option: { title: string; value: string };
-    isActive: boolean;
-  }>;
-  button?: ButtonStyleProps;
-  modalContainer?: ContainerStyleProps;
-  pickerContainerStyle?: ContainerStyleProps;
-  backgroundStyle?: ContainerStyleProps;
-}
 
 // No generic part for now. Add later after a solid solution is known
 export interface Theme<T = any> {
@@ -35,6 +25,6 @@ export interface Theme<T = any> {
 
   containers?: VariantType<ContainerStyleProps>;
   input?: VariantType<InputStyleProps>;
-  picker?: VariantType<PickerProps>;
+  picker?: VariantType<PickerThemeOverrideProps>;
   // All the additional components will appear here
 }
