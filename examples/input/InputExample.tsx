@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Input from "../../src/components/Input";
+import Input, { useInputComponent } from "../../src/components/Input";
 import { View, Text } from "react-native";
 
 const LabelComponent: React.FC = () => {
@@ -19,14 +19,17 @@ const CustomMessage: React.FC = () => {
 };
 
 const InputExample = () => {
-  const [val, setVal] = useState("hello");
+  const { inputProps } = useInputComponent("Hello");
+
+  const Validation = (val: string): boolean => val.length > 6;
+
   return (
     <Input
-      value={val}
-      onChangeText={setVal}
+      {...inputProps}
       Label={LabelComponent}
       CustomMsg={CustomMessage}
       textInputStyle={{ backgroundColor: "pink" }}
+      validation={Validation}
     />
   );
 };
