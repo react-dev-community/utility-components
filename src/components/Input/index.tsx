@@ -1,51 +1,38 @@
-import { Entypo } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React from "react";
 import {
+  StyleProp,
   StyleSheet,
-  TextInput,
   TextInputProps,
-  TouchableOpacity,
+  TextStyle,
   View,
+  TextInput,
 } from "react-native";
-import Password from "./Password";
-import { useTheme } from "../../theme";
-import { get } from "lodash";
 
 interface Props extends TextInputProps {
-  type?: "password";
-  show?: boolean | undefined;
-  variant?: string;
-  outlined?: boolean | undefined;
+  Label?: React.FC;
+  validation?: string;
+  CustomMsg?: React.FC;
+  textInputStyle?: StyleProp<TextStyle> | null;
 }
 
-const Input: React.FC<Props> = ({ type, variant, outlined, ...rest }) => {
-  const theme = useTheme();
-
-  const variantValue = variant;
-  const themeStyle = get(theme, `text.${variantValue}`, {});
-
-  // If variant is present ignore default
-  const defaultThemeStyle = variantValue ? {} : get(theme, "input.default", {});
-
-  const { style = {}, ...restProps } = rest;
-
-  let Component;
-  switch (type) {
-    case "password":
-      Component = (
-        <Password
-          style={{ ...defaultThemeStyle, ...themeStyle, ...(style as {}) }}
-          outlined={outlined}
-          {...restProps}
-        />
-      );
-      break;
-
-    default:
-      break;
-  }
-
-  return Component;
+const Input: React.FC<Props> = ({
+  Label,
+  CustomMsg,
+  value,
+  onChangeText,
+  textInputStyle,
+}) => {
+  return (
+    <View>
+      {Label && <Label />}
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        style={textInputStyle}
+      />
+      {CustomMsg && <CustomMsg />}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({});
