@@ -4,7 +4,11 @@ import { TouchableType } from '../../../types';
 export type defaultOptionType = { title: string; value: string };
 
 export interface PickerThemeOverrideProps {
-  PickerComponent?: React.FC<{ option: defaultOptionType; isActive: boolean }>;
+  PickerComponent?: React.FC<{
+    option: defaultOptionType;
+    isActive: boolean;
+    idx: number;
+  }>;
   pickerContainerStyle?: ViewStyle;
   modalContainerStyle?: ViewStyle;
   backgroundStyle?: ViewStyle;

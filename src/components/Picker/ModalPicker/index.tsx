@@ -11,6 +11,7 @@ const { height, width } = Dimensions.get('window');
 const useModalPicker = (options: defaultOptionType[]) => {
   const [visible, setVisible] = useState(false);
   const [index, setIndex] = useState(0);
+  const [state, setstate] = React.useState(true);
 
   return {
     pickerProps: {
@@ -19,6 +20,8 @@ const useModalPicker = (options: defaultOptionType[]) => {
       index,
       setIndex,
       options,
+      state,
+      setstate: () => setstate((prev) => !prev),
     },
     currentOption: options[index],
   };
@@ -39,12 +42,12 @@ const ModalPicker: React.FC<ModalPickerProps & PropsFromHook> = ({
     HeaderComponent,
     onPressPickerComponent,
     extraPickerComponentProps,
-    ...themeOverridProps
+    ...themeOverrideProps
   } = props;
 
-  const finalProps: typeof themeOverridProps = {
+  const finalProps: typeof themeOverrideProps = {
     ...get(theme, 'picker.default', {}),
-    ...themeOverridProps,
+    ...themeOverrideProps,
   };
 
   const {
@@ -89,7 +92,7 @@ const ModalPicker: React.FC<ModalPickerProps & PropsFromHook> = ({
     <>
       <PickerButton
         handlePress={() => setVisible(true)}
-        title={options[index].title}
+        option={options[index]}
       />
       <Modal
         visible={visible}
