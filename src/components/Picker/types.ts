@@ -1,5 +1,4 @@
-import { ModalProps, ViewStyle, GestureResponderEvent } from 'react-native';
-import { TouchableType } from '../../types';
+import { GestureResponderEvent, ModalProps, ViewStyle } from 'react-native';
 
 export type defaultOptionType = { title: string; value: string };
 
