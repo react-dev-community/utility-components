@@ -9,7 +9,9 @@ import {
 } from 'react-native';
 import { useTheme } from '../../theme';
 import { sit, vou } from '../../utils';
+import useDidMount from '../../utils/hooks/useDidMount';
 import Container from '../Container';
+import DefaultPickerComponent from './DefaultPickerComponent';
 import PickerButton from './PickerButton';
 import { defaultOptionType, PickerProps, PropsFromHook } from './types';
 
@@ -25,7 +27,6 @@ const initialPosition = {
 const usePicker = (options: defaultOptionType[]) => {
   const [visible, setVisible] = useState(false);
   const [index, setIndex] = useState(0);
-  const [positionState, setPositionState] = React.useState(true);
 
   return {
     pickerProps: {
@@ -34,8 +35,6 @@ const usePicker = (options: defaultOptionType[]) => {
       index,
       setIndex,
       options,
-      positionState,
-      setPositionState: () => setPositionState((prev) => !prev),
     },
     currentOption: options[index],
   };
@@ -47,7 +46,6 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
   visible,
   setIndex,
   options,
-  positionState,
   ...props
 }) => {
   const theme = useTheme();
@@ -75,24 +73,12 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
     contWidth: 0,
   });
 
-  React.useLayoutEffect(() => {
-    if (sticky) {
-      setTimeout(() => {
-        myRef.current?.measure((x, y, width, height, px, py) => {
-          setPosition({
-            px,
-            py,
-            width,
-            height,
-          });
-        });
-      }, 0);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [positionState, sticky]);
+  useDidMount(() => {
+    setVisible(true);
+  }, [position]);
 
   const {
-    PickerComponent = () => <></>,
+    PickerComponent = DefaultPickerComponent,
     pickerContainerStyle,
     rootContainerStyle,
     bgContainerStyle,
@@ -113,13 +99,14 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
 
     return !overrideTouchable ? (
       <TouchableOpacity
-        onPress={
-          onPressPickerComponent ||
-          (() => {
+        onPress={(e) => {
+          if (onPressPickerComponent) {
+            onPressPickerComponent?.(idx, option, e);
+          } else {
             setIndex(idx);
             setVisible(false);
-          })
-        }
+          }
+        }}
         key={idx}
       >
         {pc}
@@ -162,7 +149,20 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
     <>
       <View ref={myRef} onLayout={() => {}}>
         <PickerButton
-          handlePress={() => setVisible(true)}
+          handlePress={() => {
+            if (sticky) {
+              myRef.current?.measure((x, y, width, height, px, py) => {
+                setPosition({
+                  px,
+                  py,
+                  width,
+                  height,
+                });
+              });
+            } else {
+              setVisible(true);
+            }
+          }}
           option={options[index]}
         />
       </View>

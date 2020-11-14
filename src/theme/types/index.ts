@@ -25,6 +25,6 @@ export interface Theme<T = any> {
 
   containers?: VariantType<ContainerStyleProps>;
   input?: VariantType<InputStyleProps>;
-  picker?: VariantType<PickerThemeOverrideProps>;
+  picker?: VariantType<Partial<PickerThemeOverrideProps>>;
   // All the additional components will appear here
 }

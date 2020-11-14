@@ -1,15 +1,17 @@
-import { ModalProps, ViewStyle } from 'react-native';
+import { ModalProps, ViewStyle, GestureResponderEvent } from 'react-native';
 import { TouchableType } from '../../types';
 
 export type defaultOptionType = { title: string; value: string };
 
+export interface PickerComponentProps {
+  option: defaultOptionType;
+  isActive: boolean;
+  idx: number;
+}
+
 export interface PickerThemeOverrideProps {
+  PickerComponent?: React.FC<PickerComponentProps>;
   variant?: string;
-  PickerComponent?: React.FC<{
-    option: defaultOptionType;
-    isActive: boolean;
-    idx: number;
-  }>;
   pickerContainerStyle?: ViewStyle;
   rootContainerStyle?: ViewStyle;
   bgContainerStyle?: ViewStyle;
@@ -21,7 +23,11 @@ export interface PickerThemeOverrideProps {
 export interface PickerProps extends PickerThemeOverrideProps {
   HeaderComponent?: JSX.Element;
   FooterComponent?: JSX.Element;
-  onPressPickerComponent?: TouchableType;
+  onPressPickerComponent?: (
+    idx: number,
+    option: defaultOptionType,
+    e: GestureResponderEvent
+  ) => void;
   extraPickerComponentProps?: any;
 }
 
@@ -31,6 +37,4 @@ export interface PropsFromHook {
   index: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   options: defaultOptionType[];
-  setPositionState: React.Dispatch<React.SetStateAction<boolean>>;
-  positionState: boolean;
 }
