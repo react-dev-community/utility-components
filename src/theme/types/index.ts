@@ -1,5 +1,5 @@
 import { TextStyle, ViewStyle } from 'react-native';
-import { PickerThemeOverrideProps } from './../../components/Picker/ModalPicker/types';
+import { PickerThemeOverrideProps } from '../../components/Picker/types';
 
 type VariantType<P, T = any> = { [K in keyof T]: P } & { default?: P };
 

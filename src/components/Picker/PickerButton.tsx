@@ -1,9 +1,8 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-// import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { TouchableType } from '../../types';
 import Txt from '../Txt';
-import { defaultOptionType } from './ModalPicker/types';
+import { defaultOptionType } from './types';
 
 /** This is the actual picker button that will be visible to user
  * We will need a extract styles from theme and apply it so it is fully customizable
