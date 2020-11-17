@@ -3,6 +3,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { StatusBar, TouchableOpacity } from 'react-native';
+import ButtonExample from './examples/button/ButtonExample';
 import PickerExamples from './examples/picker/PickerExamples';
 import TxtExample from './examples/txt/TxtExample';
 import StyleThemeExample from './examples/useStylesAndTheme/StylesThemeExample';
@@ -66,6 +67,7 @@ export default function App() {
           <Stack.Screen name="Styles and Theme" component={StyleThemeExample} />
           <Stack.Screen name="Txt" component={TxtExample} />
           <Stack.Screen name="Picker" component={PickerExamples} />
+          <Stack.Screen name="Button" component={ButtonExample} />
         </Stack.Navigator>
       </NavigationContainer>
     </Container>
