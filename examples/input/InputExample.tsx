@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
+import { Text, View } from 'react-native';
+import { createTheme, ThemeProvider } from '../../src';
 import Input, { useInputComponent } from '../../src/components/Input';
-import { View, Text } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import Password from '../../src/components/Input/Password';
 
 const LabelComponent: React.FC = () => {
   return (
     <View>
-      <Text>Label Component</Text>
+      <Text style={{ color: 'dodgerblue' }}>Email</Text>
     </View>
   );
 };
@@ -14,25 +16,47 @@ const LabelComponent: React.FC = () => {
 const CustomMessage: React.FC = () => {
   return (
     <View>
-      <Text>Message</Text>
+      <Text style={{ color: 'red' }}>Length is less than 6</Text>
     </View>
   );
 };
 
-const InputExample = () => {
-  const { inputProps } = useInputComponent('Hello');
+const myTheme = createTheme({
+  input: {
+    default: {
+      OuterContainerStyle: { padding: 15 },
+      InnerContainerStyle: {
+        borderColor: 'dodgerblue',
+        borderWidth: 1,
+        marginVertical: 10,
+        borderRadius: 5,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+      },
+      textInputStyle: { paddingHorizontal: 10 },
+    },
+  },
+});
 
-  const Validation = (val: string): boolean => val.length > 6;
+const InputExample = () => {
+  const { inputProps } = useInputComponent('Initial Value');
+  const { inputProps: passwordProps } = useInputComponent('Password');
+
+  const Validation = (val: string): boolean => val.length >= 6;
 
   return (
-    <Input
-      {...inputProps}
-      Label={LabelComponent}
-      CustomMsg={CustomMessage}
-      textInputStyle={{ backgroundColor: 'pink' }}
-      validation={Validation}
-      LeftIcon={() => <Entypo name='email' size={24} color='black' />}
-    />
+    <ThemeProvider theme={myTheme}>
+      <Input
+        {...inputProps}
+        Label={LabelComponent}
+        CustomMsg={CustomMessage}
+        validation={Validation}
+        LeftIcon={() => (
+          <MaterialIcons name='email' size={24} color='#c4c4c4' />
+        )}
+      />
+      <Password {...passwordProps} show />
+    </ThemeProvider>
   );
 };
 

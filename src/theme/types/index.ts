@@ -5,7 +5,7 @@ type VariantType<P, T = any> = { [K in keyof T]: P } & { default?: P };
 
 type ButtonStyleProps = any;
 export type ContainerStyleProps = ViewStyle;
-interface InputStyleProps {
+export interface InputStyleProps {
   OuterContainerStyle?: ContainerStyleProps;
   InnerContainerStyle?: ContainerStyleProps;
   textInputStyle?: StyleProp<TextStyle> | null;

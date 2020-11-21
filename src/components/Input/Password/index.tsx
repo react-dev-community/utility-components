@@ -1,60 +1,48 @@
-import { Entypo } from "@expo/vector-icons";
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-  TextInputProps,
-} from "react-native";
-import { vou, tof } from "../../../utils";
+import { Entypo } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Input from '..';
+import { tof } from '../../../utils';
+import { InputProps } from '../types/types';
 
-interface Props extends TextInputProps {
+interface Props extends InputProps {
   show?: boolean | undefined;
-  outlined?: boolean | undefined;
 }
 
-const Password: React.FC<Props> = ({ show, style, outlined, ...rest }) => {
+const Password: React.FC<Props> = ({ show, ...rest }) => {
   const [toShow, setToShow] = useState<boolean>(false);
 
-  return (
-    <View
-      style={{
-        ...styles.outerContainer,
-        ...(outlined ? styles.outlinedContainer : null),
-      }}
-    >
-      <TextInput {...rest} secureTextEntry={tof(toShow)} style={style} />
-      {vou(
-        show,
-        <TouchableOpacity
-          style={styles.innerContainer}
-          onPress={() => setToShow((prevState) => !prevState)}
-        >
-          <Entypo name={toShow ? "eye-with-line" : "eye"} size={17} />
-        </TouchableOpacity>
-      )}
-    </View>
+  console.log(toShow);
+
+  return show ? (
+    <Input
+      {...rest}
+      secureTextEntry={tof(toShow)}
+      RightIcon={() =>
+        toShow ? (
+          <TouchableOpacity>
+            <Entypo
+              onPress={() => setToShow((prev) => !prev)}
+              name='eye'
+              size={20}
+              color='black'
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity>
+            <Entypo
+              onPress={() => setToShow((prev) => !prev)}
+              name='eye-with-line'
+              size={20}
+              color='black'
+            />
+          </TouchableOpacity>
+        )
+      }
+    />
+  ) : (
+    <Input {...rest} secureTextEntry={true} />
   );
 };
-
-const styles = StyleSheet.create({
-  outerContainer: {
-    position: "relative",
-    paddingHorizontal: 35,
-  },
-
-  innerContainer: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-  },
-
-  outlinedContainer: {
-    borderWidth: 5,
-    borderColor: "green",
-    borderRadius: 5,
-  },
-});
 
 export default Password;

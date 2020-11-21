@@ -1,27 +1,10 @@
+import { get } from 'lodash';
 import React, { useState } from 'react';
-import {
-  StyleProp,
-  StyleSheet,
-  TextInput,
-  TextInputProps,
-  TextStyle,
-} from 'react-native';
-import { ContainerStyleProps } from '../../theme/types';
+import { StyleSheet, TextInput } from 'react-native';
+import { useTheme } from '../../theme';
+import { InputStyleProps } from '../../theme/types';
 import Container from '../Container';
-
-interface Props extends TextInputProps {
-  Label?: React.FC;
-  validation?: (val: string) => boolean;
-  CustomMsg?: React.FC;
-  textInputStyle?: StyleProp<TextStyle> | null;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
-  isValid: boolean;
-  setIsValid: React.Dispatch<React.SetStateAction<boolean>>;
-  LeftIcon?: React.FC;
-  RightIcon?: React.FC;
-  OuterContainerStyle?: ContainerStyleProps;
-  InnerContainerStyle?: ContainerStyleProps;
-}
+import { InputProps } from './types/types';
 
 export const useInputComponent = (initialValue: string) => {
   const [value, setValue] = useState(initialValue);
@@ -37,20 +20,28 @@ export const useInputComponent = (initialValue: string) => {
   };
 };
 
-const Input: React.FC<Props> = ({
+const Input: React.FC<InputProps> = ({
   Label,
   CustomMsg,
   value,
   setValue,
   isValid,
   setIsValid,
-  textInputStyle,
   validation,
   LeftIcon,
   RightIcon,
-  OuterContainerStyle,
-  InnerContainerStyle,
+  ...themeOverrideProps
 }) => {
+  const theme = useTheme();
+
+  const { secureTextEntry } = themeOverrideProps;
+
+  /* Calculate final props based on prority (default -> variant -> direct props) */
+  const finalProps: InputStyleProps = {
+    ...get(theme, 'input.default', {}),
+    ...themeOverrideProps,
+  };
+
   const handleChange = (val: string) => {
     const isValidated: boolean = validation ? validation(val) : true;
 
@@ -59,14 +50,15 @@ const Input: React.FC<Props> = ({
   };
 
   return (
-    <Container style={OuterContainerStyle}>
+    <Container style={finalProps.OuterContainerStyle}>
       {Label && <Label />}
-      <Container row alignItems='center' style={InnerContainerStyle}>
+      <Container row alignItems='center' style={finalProps.InnerContainerStyle}>
         {LeftIcon && <LeftIcon />}
         <TextInput
           value={value}
           onChangeText={handleChange}
-          style={textInputStyle}
+          style={[{ flex: 1 }, finalProps.textInputStyle]}
+          secureTextEntry={secureTextEntry}
         />
         {RightIcon && <RightIcon />}
       </Container>
