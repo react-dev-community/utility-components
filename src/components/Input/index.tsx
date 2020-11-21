@@ -6,6 +6,7 @@ import {
   TextInputProps,
   TextStyle,
 } from 'react-native';
+import { ContainerStyleProps } from '../../theme/types';
 import Container from '../Container';
 
 interface Props extends TextInputProps {
@@ -18,6 +19,8 @@ interface Props extends TextInputProps {
   setIsValid: React.Dispatch<React.SetStateAction<boolean>>;
   LeftIcon?: React.FC;
   RightIcon?: React.FC;
+  OuterContainerStyle?: ContainerStyleProps;
+  InnerContainerStyle?: ContainerStyleProps;
 }
 
 export const useInputComponent = (initialValue: string) => {
@@ -45,6 +48,8 @@ const Input: React.FC<Props> = ({
   validation,
   LeftIcon,
   RightIcon,
+  OuterContainerStyle,
+  InnerContainerStyle,
 }) => {
   const handleChange = (val: string) => {
     const isValidated: boolean = validation ? validation(val) : true;
@@ -54,9 +59,9 @@ const Input: React.FC<Props> = ({
   };
 
   return (
-    <Container>
+    <Container style={OuterContainerStyle}>
       {Label && <Label />}
-      <Container row alignItems='center'>
+      <Container row alignItems='center' style={InnerContainerStyle}>
         {LeftIcon && <LeftIcon />}
         <TextInput
           value={value}
