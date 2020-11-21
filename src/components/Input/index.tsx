@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   StyleProp,
   StyleSheet,
+  TextInput,
   TextInputProps,
   TextStyle,
-  View,
-  TextInput,
-} from "react-native";
+} from 'react-native';
+import Container from '../Container';
 
 interface Props extends TextInputProps {
   Label?: React.FC;
@@ -16,6 +16,8 @@ interface Props extends TextInputProps {
   setValue: React.Dispatch<React.SetStateAction<string>>;
   isValid: boolean;
   setIsValid: React.Dispatch<React.SetStateAction<boolean>>;
+  LeftIcon?: React.FC;
+  RightIcon?: React.FC;
 }
 
 export const useInputComponent = (initialValue: string) => {
@@ -41,6 +43,8 @@ const Input: React.FC<Props> = ({
   setIsValid,
   textInputStyle,
   validation,
+  LeftIcon,
+  RightIcon,
 }) => {
   const handleChange = (val: string) => {
     const isValidated: boolean = validation ? validation(val) : true;
@@ -50,15 +54,19 @@ const Input: React.FC<Props> = ({
   };
 
   return (
-    <View>
+    <Container>
       {Label && <Label />}
-      <TextInput
-        value={value}
-        onChangeText={handleChange}
-        style={textInputStyle}
-      />
+      <Container row alignItems='center'>
+        {LeftIcon && <LeftIcon />}
+        <TextInput
+          value={value}
+          onChangeText={handleChange}
+          style={textInputStyle}
+        />
+        {RightIcon && <RightIcon />}
+      </Container>
       {!isValid && CustomMsg && <CustomMsg />}
-    </View>
+    </Container>
   );
 };
 

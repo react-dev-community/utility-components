@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import Input, { useInputComponent } from "../../src/components/Input";
-import { View, Text } from "react-native";
+import React, { useState } from 'react';
+import Input, { useInputComponent } from '../../src/components/Input';
+import { View, Text } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 
 const LabelComponent: React.FC = () => {
   return (
@@ -19,7 +20,7 @@ const CustomMessage: React.FC = () => {
 };
 
 const InputExample = () => {
-  const { inputProps } = useInputComponent("Hello");
+  const { inputProps } = useInputComponent('Hello');
 
   const Validation = (val: string): boolean => val.length > 6;
 
@@ -28,8 +29,9 @@ const InputExample = () => {
       {...inputProps}
       Label={LabelComponent}
       CustomMsg={CustomMessage}
-      textInputStyle={{ backgroundColor: "pink" }}
+      textInputStyle={{ backgroundColor: 'pink' }}
       validation={Validation}
+      LeftIcon={() => <Entypo name='email' size={24} color='black' />}
     />
   );
 };
