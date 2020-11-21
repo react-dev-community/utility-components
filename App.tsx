@@ -53,6 +53,7 @@ const Initial = () => {
       <ExRow name="Styles and Theme" />
       <ExRow name="Txt" />
       <ExRow name="Picker" />
+      <ExRow name="Button" />
     </Container>
   );
 };

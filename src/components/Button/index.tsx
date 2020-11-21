@@ -4,6 +4,7 @@ import {
   Pressable,
   PressableProps,
   ButtonProps,
+  ViewStyle,
 } from 'react-native';
 import { Container } from '..';
 import Txt from '../Txt';
@@ -17,6 +18,10 @@ interface Props
 }
 
 const Button: React.FC<Props> = ({ mode, ...props }) => {
+  if (mode === undefined) {
+    mode = 'text';
+  }
+
   let backgroundColor, borderColor, textColor, borderWidth;
   if (mode === 'contained') {
     if (props.disabled) {
@@ -29,7 +34,7 @@ const Button: React.FC<Props> = ({ mode, ...props }) => {
   }
 
   if (mode === 'outlined') {
-    borderColor = 'black'; // should be 'rgba(black/white, 0.29) based on light/dark mode' as per Material guidelines
+    borderColor = props.color; // should be 'rgba(black/white, 0.29) based on light/dark mode' as per Material guidelines
     borderWidth = StyleSheet.hairlineWidth;
   } else {
     borderColor = 'transparent';
@@ -42,19 +47,25 @@ const Button: React.FC<Props> = ({ mode, ...props }) => {
     textColor = 'black'; // should be black/white depending on theme
   } else if (props.color) {
     textColor = props.color;
-  } else textColor = 'black'; // should be theme.primary because it would be in outline or text mode
+  } else {
+    textColor = 'black';
+  } // should be theme.primary because it would be in outline or text mode
 
-  const ButtonStyle = {
+  const ButtonStyle: ViewStyle = {
     backgroundColor,
     borderColor,
     borderWidth,
-    color: textColor,
+    paddingVertical: 2,
+    paddingHorizontal: 5,
   };
 
   return (
     <Pressable {...props}>
-      <Container centered style={{ ...(props.style as {}), ...ButtonStyle }}>
-        <Txt>{props.children}</Txt>
+      <Container
+        centered
+        style={{ ...(props.style as {}), ...ButtonStyle }}
+      >
+        <Txt style={{ color: textColor }}>{props.title}</Txt>
       </Container>
     </Pressable>
   );
