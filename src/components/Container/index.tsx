@@ -31,7 +31,7 @@ const Container: React.FC<Props> = ({
     justifyContent: justify || vou(centered, 'center'),
     alignItems: alignItems || vou(centered, 'center'),
     flexDirection: direction || vou(row, 'row'),
-    flex: isNumber(grow) ? grow : 1,
+    flex: vou(grow as boolean, isNumber(grow) ? grow : 1),
     ...(border
       ? {
           borderWidth: 1,
