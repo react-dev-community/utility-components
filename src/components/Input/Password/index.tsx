@@ -14,6 +14,23 @@ const Password: React.FC<Props> = ({ show, ...rest }) => {
 
   console.log(toShow);
 
+  /*>>>>>> render can be improved */
+  /*
+    <Input
+			{...rest}
+			secureTextEntry={show || tof(toShow)}
+			RightIcon={vou(show, () => (
+				<TouchableOpacity>
+					<Entypo
+						onPress={() => setToShow((prev) => !prev)}
+						name={`eye${toShow ? '' : '-with-line'}`}
+						size={20}
+						color="black"
+					/>
+				</TouchableOpacity>
+			))}
+		/>
+  */
   return show ? (
     <Input
       {...rest}
