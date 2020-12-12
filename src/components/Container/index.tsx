@@ -2,7 +2,8 @@ import React from 'react';
 import { FlexAlignType, FlexStyle, View, ViewProps } from 'react-native';
 import { FlexDirectionType, FlexJustifyType } from '../../types';
 import { vou } from '../../utils';
-import { isNumber, isString } from 'lodash';
+import { isNumber, isString, get } from 'lodash';
+import { useTheme } from '../../theme';
 
 export interface ContainerProps extends ViewProps {
   variant?: string;
@@ -16,6 +17,7 @@ export interface ContainerProps extends ViewProps {
 }
 
 const Container: React.FC<ContainerProps> = ({
+  variant,
   children,
   alignItems,
   direction,
@@ -42,9 +44,25 @@ const Container: React.FC<ContainerProps> = ({
   };
 
   // Add code to extract theme style variant of container (refer Txt)
+  const theme = useTheme();
+  const type = (props as any).type;
+  const variantValue = variant || type;
+  const themeStyle = get(theme, `containers.${variantValue}`, {});
+  // If variant is present ignore default
+  const defaultThemeStyle = variantValue
+    ? {}
+    : get(theme, 'containers.default', {});
 
   return (
-    <View style={{ ...flexStyle, ...(style as {}) }} {...restProps}>
+    <View
+      style={{
+        ...defaultThemeStyle,
+        ...flexStyle,
+        ...themeStyle,
+        ...(style as {}),
+      }}
+      {...restProps}
+    >
       {children}
     </View>
   );
