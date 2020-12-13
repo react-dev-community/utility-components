@@ -3,10 +3,12 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { StatusBar, TouchableOpacity } from 'react-native';
+import AlertExample from './examples/alert/AlertExample';
 import PickerExamples from './examples/picker/PickerExamples';
 import TxtExample from './examples/txt/TxtExample';
 import StyleThemeExample from './examples/useStylesAndTheme/StylesThemeExample';
 import { Container, createStyles, Txt } from './src';
+import { AlertProvider } from './src/components/Alert';
 
 const Stack = createStackNavigator();
 
@@ -49,9 +51,10 @@ const Initial = () => {
   const styles = useStyles();
   return (
     <Container grow style={styles.root}>
-      <ExRow name="Styles and Theme" />
-      <ExRow name="Txt" />
-      <ExRow name="Picker" />
+      <ExRow name='Styles and Theme' />
+      <ExRow name='Txt' />
+      <ExRow name='Picker' />
+      <ExRow name='Alert' />
     </Container>
   );
 };
@@ -59,15 +62,21 @@ const Initial = () => {
 export default function App() {
   return (
     <Container grow>
-      <StatusBar hidden />
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Examples">
-          <Stack.Screen name="Examples" component={Initial} />
-          <Stack.Screen name="Styles and Theme" component={StyleThemeExample} />
-          <Stack.Screen name="Txt" component={TxtExample} />
-          <Stack.Screen name="Picker" component={PickerExamples} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AlertProvider>
+        <StatusBar hidden />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='Examples'>
+            <Stack.Screen name='Examples' component={Initial} />
+            <Stack.Screen
+              name='Styles and Theme'
+              component={StyleThemeExample}
+            />
+            <Stack.Screen name='Txt' component={TxtExample} />
+            <Stack.Screen name='Picker' component={PickerExamples} />
+            <Stack.Screen name='Alert' component={AlertExample} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AlertProvider>
     </Container>
   );
 }
