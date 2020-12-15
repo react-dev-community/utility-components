@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 import React, { useState } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { TextInput } from 'react-native';
 import { useTheme } from '../../theme';
 import { InputStyleProps } from '../../theme/types';
 import Container from '../Container';
@@ -52,7 +52,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <Container style={finalProps.OuterContainerStyle}>
       {Label && <Label />}
-      <Container row alignItems='center' style={finalProps.InnerContainerStyle}>
+      <Container row alignItems="center" style={finalProps.InnerContainerStyle}>
         {LeftIcon && <LeftIcon />}
         <TextInput
           value={value}
@@ -66,7 +66,5 @@ const Input: React.FC<InputProps> = ({
     </Container>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default Input;
