@@ -7,13 +7,14 @@ export interface Alert {
   buttonLeftPress?: (() => void) | null;
   buttonRightText?: string | null;
   buttonRightPress?: (() => void) | null;
-  HeaderComponent?: JSX.Element;
-  FooterComponent?: JSX.Element;
-  BodyComponent?: JSX.Element;
+  HeaderComponent?: () => JSX.Element;
+  FooterComponent?: () => JSX.Element;
+  BodyComponent?: () => JSX.Element;
   visible: boolean;
 }
 
 export interface AlertContextType {
   alertState: Alert;
   setAlertState: React.Dispatch<React.SetStateAction<Alert>>;
+  closeModal: () => void;
 }

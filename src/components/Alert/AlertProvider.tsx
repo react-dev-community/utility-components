@@ -13,8 +13,18 @@ const AlertProvider: React.FC = ({ children }) => {
     buttonRightPress: null,
     visible: false,
   });
+
+  const closeModal = () => {
+    setAlertState((prev) => {
+      return {
+        ...prev,
+        visible: false,
+      };
+    });
+  };
+
   return (
-    <AlertContext.Provider value={{ alertState, setAlertState }}>
+    <AlertContext.Provider value={{ alertState, setAlertState, closeModal }}>
       <DefaultAlert />
       {children}
     </AlertContext.Provider>
