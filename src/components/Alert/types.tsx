@@ -11,7 +11,10 @@ export interface Alert {
   FooterComponent?: () => JSX.Element;
   BodyComponent?: () => JSX.Element;
   visible: boolean;
+  onOutsideClose?: boolean;
 }
+
+//export type AlertChildrenType<T = {}> = React.FC<T & AlertContextType>;
 
 export interface AlertContextType {
   alertState: Alert;
