@@ -1,20 +1,26 @@
 import React from 'react';
 import {
   StyleSheet,
-  Pressable,
-  PressableProps,
+  // Pressable,
+  // PressableProps,
+  TouchableHighlightProps,
+  TouchableHighlight,
   ButtonProps,
   ViewStyle,
 } from 'react-native';
 import { Container } from '..';
 import Txt from '../Txt';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 interface Props
-  extends PressableProps,
+  extends TouchableHighlightProps,
     Omit<ButtonProps, 'onPress' | 'disabled'> {
   mode?: 'text' | 'outlined' | 'contained';
+  rounded?: number;
+  startIcon?: string;
+  endIcon?: string;
 }
 
 const Button: React.FC<Props> = ({ mode, ...props }) => {
@@ -57,17 +63,39 @@ const Button: React.FC<Props> = ({ mode, ...props }) => {
     borderWidth,
     paddingVertical: 2,
     paddingHorizontal: 5,
+    borderRadius: props.rounded,
   };
 
   return (
-    <Pressable {...props}>
+    <TouchableHighlight {...props}>
       <Container
         centered
         style={{ ...(props.style as {}), ...ButtonStyle }}
+        direction="row"
       >
+        {props.startIcon && (
+          <MaterialCommunityIcons
+            name={props.startIcon}
+            size={24}
+            color={textColor.toString()}
+            // style={{
+            //   paddingRight: ButtonStyle.paddingHorizontal,
+            // }}
+          />
+        )}
         <Txt style={{ color: textColor }}>{props.title}</Txt>
+        {props.endIcon && (
+          <MaterialCommunityIcons
+            name={props.endIcon}
+            size={24}
+            color={textColor.toString()}
+            // style={{
+            //   paddingLeft: ButtonStyle.paddingHorizontal,
+            // }}
+          />
+        )}
       </Container>
-    </Pressable>
+    </TouchableHighlight>
   );
 };
 
