@@ -1,6 +1,21 @@
 import React from 'react';
+import { ModalProps, StyleProp, TextStyle, ViewStyle } from 'react-native';
 
-export interface Alert {
+//export type AlertChildrenType<T = {}> = React.FC<T & AlertContextType>;
+
+export interface AlertThemeOverrideProps {
+  overlayContainerStyle?: StyleProp<ViewStyle>;
+  alertContainerStyle?: StyleProp<ViewStyle>;
+  headerStyle?: StyleProp<TextStyle>;
+  bodyStyle?: StyleProp<TextStyle>;
+  footerContainerStyle?: StyleProp<ViewStyle>;
+  footerLeftButtonStyle?: StyleProp<ViewStyle>;
+  footerRightButtonStyle?: StyleProp<ViewStyle>;
+  footerLeftTextStyle?: StyleProp<TextStyle>;
+  footerRightTextStyle?: StyleProp<TextStyle>;
+}
+
+export interface Alert extends AlertThemeOverrideProps {
   title?: string | null;
   textContent?: string | null;
   buttonLeftText?: string | null;
@@ -12,9 +27,9 @@ export interface Alert {
   BodyComponent?: () => JSX.Element;
   visible: boolean;
   onOutsideClose?: boolean;
+  modalProps?: ModalProps;
+  variant?: string;
 }
-
-//export type AlertChildrenType<T = {}> = React.FC<T & AlertContextType>;
 
 export interface AlertContextType {
   alertState: Alert;

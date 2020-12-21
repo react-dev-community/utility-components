@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Txt } from '../../src';
+import { createTheme, ThemeProvider, Txt } from '../../src';
 import { useAlert } from '../../src/components/Alert/AlertContext';
 
 const HeaderComponent = () => {
@@ -24,6 +24,8 @@ const AlertExample = () => {
             buttonLeftText: 'Close',
             buttonRightText: 'Ok',
             HeaderComponent,
+            variant: 'type1',
+            modalProps: { transparent: true },
             textContent:
               "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
           };

@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import React from 'react';
 import {
   Modal,
@@ -5,14 +6,19 @@ import {
   TouchableOpacity,
   View,
   TouchableWithoutFeedback,
+  Text,
 } from 'react-native';
+import { useTheme } from '../../theme';
 import Container from '../Container';
 import Txt from '../Txt';
 import { useAlert } from './AlertContext';
 
 const DefaultAlert = () => {
   const alert = useAlert();
+  const theme = useTheme();
+
   const { alertState, closeModal } = alert;
+
   const {
     title,
     textContent,
@@ -25,34 +31,64 @@ const DefaultAlert = () => {
     BodyComponent,
     FooterComponent,
     onOutsideClose,
+    modalProps,
+    ...themeOverrideProps
   } = alertState;
+
+  const finalProps: typeof themeOverrideProps = {
+    ...get(theme, 'alert.default', {}),
+    ...get(theme, `alert.${alertState.variant}`, {}),
+    ...themeOverrideProps,
+  };
+
+  const {
+    overlayContainerStyle,
+    alertContainerStyle,
+    headerStyle,
+    bodyStyle,
+    footerContainerStyle,
+    footerLeftButtonStyle,
+    footerRightButtonStyle,
+    footerLeftTextStyle,
+    footerRightTextStyle,
+  } = finalProps;
+
+  console.log(bodyStyle);
+
   return (
     <Modal
       visible={visible}
       onRequestClose={closeModal}
-      animationType='slide'
-      transparent={true}
+      animationType={modalProps?.animationType || 'slide'}
+      {...modalProps}
     >
       <TouchableWithoutFeedback onPress={() => onOutsideClose && closeModal()}>
-        <View style={styles.container}>
-          <Container style={styles.alertContainer}>
+        <View style={[styles.container, overlayContainerStyle]}>
+          <View style={[styles.alertContainer, alertContainerStyle]}>
             <TouchableWithoutFeedback onPress={() => {}}>
               <View>
                 {(HeaderComponent && HeaderComponent()) || (
-                  <Txt style={styles.title}>{title}</Txt>
+                  <Txt style={[styles.title, headerStyle]}>{title}</Txt>
                 )}
-                {(BodyComponent && BodyComponent()) || <Txt>{textContent}</Txt>}
+                {(BodyComponent && BodyComponent()) || (
+                  <Txt style={bodyStyle}>{textContent}</Txt>
+                )}
                 {(FooterComponent && FooterComponent()) || (
-                  <Container row style={styles.footerContainer}>
+                  <Container
+                    row
+                    style={[styles.footerContainer, footerContainerStyle]}
+                  >
                     {buttonLeftText && (
                       <TouchableOpacity
                         onPress={() => {
                           buttonLeftPress?.();
                           closeModal();
                         }}
-                        style={styles.LeftbuttonStyle}
+                        style={[styles.LeftbuttonStyle, footerLeftButtonStyle]}
                       >
-                        <Txt style={styles.text}>{buttonLeftText}</Txt>
+                        <Text style={[styles.text, footerLeftTextStyle]}>
+                          {buttonLeftText}
+                        </Text>
                       </TouchableOpacity>
                     )}
                     {buttonRightText && (
@@ -61,16 +97,21 @@ const DefaultAlert = () => {
                           buttonRightPress?.();
                           closeModal();
                         }}
-                        style={styles.RightbuttonStyle}
+                        style={[
+                          styles.RightbuttonStyle,
+                          footerRightButtonStyle,
+                        ]}
                       >
-                        <Txt style={styles.text}>{buttonRightText}</Txt>
+                        <Text style={[styles.text, footerRightTextStyle]}>
+                          {buttonRightText}
+                        </Text>
                       </TouchableOpacity>
                     )}
                   </Container>
                 )}
               </View>
             </TouchableWithoutFeedback>
-          </Container>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
@@ -115,9 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginRight: 5,
   },
-  text: {
-    color: '#fff',
-  },
+  text: {},
   footerContainer: {
     marginVertical: 10,
   },
