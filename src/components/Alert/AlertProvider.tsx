@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AlertContext } from './AlertContext';
-import DefaultAlert from './DefaultAlert';
+import DefaultAlert from './Alert';
 import { Alert } from './types';
 
 const AlertProvider: React.FC = ({ children }) => {
@@ -14,6 +14,9 @@ const AlertProvider: React.FC = ({ children }) => {
     visible: false,
   });
 
+  /**
+   * Function which sets visible to false to close the modal
+   */
   const closeModal = () => {
     setAlertState((prev) => {
       return {

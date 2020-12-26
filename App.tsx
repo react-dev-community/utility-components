@@ -7,7 +7,13 @@ import AlertExample from './examples/alert/AlertExample';
 import PickerExamples from './examples/picker/PickerExamples';
 import TxtExample from './examples/txt/TxtExample';
 import StyleThemeExample from './examples/useStylesAndTheme/StylesThemeExample';
-import { Container, createStyles, Txt } from './src';
+import {
+  Container,
+  createStyles,
+  createTheme,
+  ThemeProvider,
+  Txt,
+} from './src';
 import { AlertProvider } from './src/components/Alert';
 
 const Stack = createStackNavigator();
@@ -59,24 +65,50 @@ const Initial = () => {
   );
 };
 
+const theme = createTheme({
+  alert: {
+    default: {
+      bodyStyle: {
+        fontSize: 18,
+        color: 'pink',
+      },
+      footerLeftTextStyle: {
+        color: 'yellow',
+      },
+    },
+    type1: {
+      bodyStyle: {
+        fontSize: 13,
+        color: 'green',
+      },
+      footerLeftTextStyle: {
+        color: 'red',
+      },
+    },
+  },
+});
+
 export default function App() {
   return (
     <Container grow>
-      <AlertProvider>
-        <StatusBar hidden />
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName='Examples'>
-            <Stack.Screen name='Examples' component={Initial} />
+      <ThemeProvider theme={theme}>
+        <AlertProvider>
+          <StatusBar hidden />
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName='Examples'>
+              {/* <Stack.Screen name='Examples' component={Initial} />
             <Stack.Screen
               name='Styles and Theme'
               component={StyleThemeExample}
             />
             <Stack.Screen name='Txt' component={TxtExample} />
-            <Stack.Screen name='Picker' component={PickerExamples} />
-            <Stack.Screen name='Alert' component={AlertExample} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </AlertProvider>
+            <Stack.Screen name='Picker' component={PickerExamples} /> */}
+
+              <Stack.Screen name='Alert' component={AlertExample} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </AlertProvider>
+      </ThemeProvider>
     </Container>
   );
 }
