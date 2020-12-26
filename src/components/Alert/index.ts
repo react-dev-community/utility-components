@@ -1,2 +1,2 @@
-export { default as DefaultAlert } from './DefaultAlert';
+export { default as Alert } from './Alert';
 export { default as AlertProvider } from './AlertProvider';

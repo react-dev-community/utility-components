@@ -12,8 +12,56 @@ import { useTheme } from '../../theme';
 import Container from '../Container';
 import Txt from '../Txt';
 import { useAlert } from './AlertContext';
+import { AlertContextType } from './types';
 
-const DefaultAlert = () => {
+const DefaultFooter: React.FC<{ alert: Partial<AlertContextType> }> = ({
+  alert,
+}) => {
+  const {
+    footerContainerStyle,
+    buttonLeftPress,
+    footerLeftButtonStyle,
+    footerLeftTextStyle,
+    buttonLeftText,
+    buttonRightText,
+    buttonRightPress,
+    footerRightButtonStyle,
+    footerRightTextStyle,
+  } = alert.alertState!;
+  const { closeModal } = alert;
+  return (
+    <Container row style={[styles.footerContainer, footerContainerStyle]}>
+      {buttonLeftText && (
+        <TouchableOpacity
+          onPress={() => {
+            buttonLeftPress?.();
+            closeModal?.();
+          }}
+          style={[styles.LeftbuttonStyle, footerLeftButtonStyle]}
+        >
+          <Text style={[styles.text, footerLeftTextStyle]}>
+            {buttonLeftText}
+          </Text>
+        </TouchableOpacity>
+      )}
+      {buttonRightText && (
+        <TouchableOpacity
+          onPress={() => {
+            buttonRightPress?.();
+            closeModal?.();
+          }}
+          style={[styles.RightbuttonStyle, footerRightButtonStyle]}
+        >
+          <Text style={[styles.text, footerRightTextStyle]}>
+            {buttonRightText}
+          </Text>
+        </TouchableOpacity>
+      )}
+    </Container>
+  );
+};
+
+const Alert = () => {
   const alert = useAlert();
   const theme = useTheme();
 
@@ -22,10 +70,6 @@ const DefaultAlert = () => {
   const {
     title,
     textContent,
-    buttonLeftText,
-    buttonRightText,
-    buttonLeftPress,
-    buttonRightPress,
     visible,
     HeaderComponent,
     BodyComponent,
@@ -46,14 +90,7 @@ const DefaultAlert = () => {
     alertContainerStyle,
     headerStyle,
     bodyStyle,
-    footerContainerStyle,
-    footerLeftButtonStyle,
-    footerRightButtonStyle,
-    footerLeftTextStyle,
-    footerRightTextStyle,
   } = finalProps;
-
-  console.log(bodyStyle);
 
   return (
     <Modal
@@ -62,52 +99,48 @@ const DefaultAlert = () => {
       animationType={modalProps?.animationType || 'slide'}
       {...modalProps}
     >
+      {/*
+        Outer TouchableWithoutFeedback helps close the modal on outside press
+      */}
       <TouchableWithoutFeedback onPress={() => onOutsideClose && closeModal()}>
         <View style={[styles.container, overlayContainerStyle]}>
           <View style={[styles.alertContainer, alertContainerStyle]}>
             <TouchableWithoutFeedback onPress={() => {}}>
+              {/*
+                  OnPress is an empty function to override the press event of the Outer TouchableWithoutFeedback
+                  so as to prevent modal from closing on pressing inside it.
+                */}
               <View>
-                {(HeaderComponent && HeaderComponent()) || (
+                {/*
+                  Custom Header Component
+                  Priority :
+                    1) Custom Header
+                    2) Default title header
+                */}
+                {(HeaderComponent && HeaderComponent(alert)) || (
                   <Txt style={[styles.title, headerStyle]}>{title}</Txt>
                 )}
-                {(BodyComponent && BodyComponent()) || (
+
+                {/*
+                  Custom Body Component
+                  Priority :
+                    1) Custom Body
+                    2) Default text content
+                */}
+
+                {(BodyComponent && BodyComponent(alert)) || (
                   <Txt style={bodyStyle}>{textContent}</Txt>
                 )}
-                {(FooterComponent && FooterComponent()) || (
-                  <Container
-                    row
-                    style={[styles.footerContainer, footerContainerStyle]}
-                  >
-                    {buttonLeftText && (
-                      <TouchableOpacity
-                        onPress={() => {
-                          buttonLeftPress?.();
-                          closeModal();
-                        }}
-                        style={[styles.LeftbuttonStyle, footerLeftButtonStyle]}
-                      >
-                        <Text style={[styles.text, footerLeftTextStyle]}>
-                          {buttonLeftText}
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                    {buttonRightText && (
-                      <TouchableOpacity
-                        onPress={() => {
-                          buttonRightPress?.();
-                          closeModal();
-                        }}
-                        style={[
-                          styles.RightbuttonStyle,
-                          footerRightButtonStyle,
-                        ]}
-                      >
-                        <Text style={[styles.text, footerRightTextStyle]}>
-                          {buttonRightText}
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  </Container>
+
+                {/*
+                  Custom Footer Component
+                  Priority :
+                    1) Custom Footer
+                    2) Default footer component (with 2 buttons)
+                */}
+
+                {(FooterComponent && FooterComponent(alert)) || (
+                  <DefaultFooter alert={alert} />
                 )}
               </View>
             </TouchableWithoutFeedback>
@@ -118,7 +151,7 @@ const DefaultAlert = () => {
   );
 };
 
-export default DefaultAlert;
+export default Alert;
 
 const styles = StyleSheet.create({
   container: {
