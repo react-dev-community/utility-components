@@ -1,6 +1,6 @@
 // Styles
 
-import { StyleProp, TextStyle } from 'react-native';
+import { GestureResponderEvent, StyleProp, TextStyle } from 'react-native';
 
 export type FlexJustifyType =
   | 'flex-start'
@@ -19,3 +19,7 @@ export type FlexDirectionType =
 export type TxtSty = StyleProp<TextStyle>;
 
 export type VariantTypes<T> = keyof NonNullable<T>;
+
+export type TouchableType =
+  | ((event: GestureResponderEvent) => void)
+  | undefined;
