@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
 import { get, merge } from 'lodash';
-=======
-import { get } from 'lodash';
->>>>>>> Stashed changes
 import React, { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 import { useTheme } from '../../theme';
