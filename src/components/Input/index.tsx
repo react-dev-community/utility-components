@@ -1,14 +1,21 @@
-import { get } from 'lodash';
-import React, { useState } from 'react';
-import { TextInput } from 'react-native';
-import { useTheme } from '../../theme';
-import { InputStyleProps } from '../../theme/types';
-import Container from '../Container';
-import { InputProps } from './types/types';
+import { get } from "lodash";
+import React, { useRef, useState } from "react";
+import { TextInput } from "react-native";
+import { useTheme } from "../../theme";
+import { InputStyleProps } from "../../theme/types";
+import Container from "../Container";
+import { InputProps } from "./types/types";
 
 export const useInputComponent = (initialValue: string) => {
   const [value, setValue] = useState(initialValue);
   const [isValid, setIsValid] = useState(true);
+
+  const inputRef:
+    | string
+    | React.RefObject<TextInput>
+    | ((instance: TextInput | null) => void)
+    | null
+    | undefined = useRef(null);
 
   return {
     inputProps: {
@@ -16,6 +23,7 @@ export const useInputComponent = (initialValue: string) => {
       setValue,
       isValid,
       setIsValid,
+      inputRef,
     },
   };
 };
@@ -27,6 +35,8 @@ const Input: React.FC<InputProps> = ({
   setValue,
   isValid,
   setIsValid,
+  inputRef,
+  variant,
   validation,
   LeftIcon,
   RightIcon,
@@ -38,9 +48,19 @@ const Input: React.FC<InputProps> = ({
 
   /* Calculate final props based on prority (default -> variant -> direct props) */
   const finalProps: InputStyleProps = {
-    ...get(theme, 'input.default', {}),
+    ...get(theme, "input.default", {}),
+    ...get(theme, `input.${variant}`, {}),
     ...themeOverrideProps,
   };
+
+  const {
+    InnerContainerStyle,
+    OuterContainerStyle,
+    textInputStyle,
+    ...rest
+  } = finalProps;
+
+  console.log(finalProps);
 
   const handleChange = (val: string) => {
     const isValidated: boolean = validation ? validation(val) : true;
@@ -50,15 +70,17 @@ const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <Container style={finalProps.OuterContainerStyle}>
+    <Container style={OuterContainerStyle}>
       {Label && <Label />}
-      <Container row alignItems="center" style={finalProps.InnerContainerStyle}>
+      <Container row alignItems='center' style={InnerContainerStyle}>
         {LeftIcon && <LeftIcon />}
         <TextInput
           value={value}
           onChangeText={handleChange}
-          style={[{ flex: 1 }, finalProps.textInputStyle]}
+          style={[{ flex: 1 }, textInputStyle]}
           secureTextEntry={secureTextEntry}
+          ref={inputRef}
+          {...rest}
         />
         {RightIcon && <RightIcon />}
       </Container>
