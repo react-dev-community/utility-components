@@ -1,10 +1,10 @@
-import { get } from "lodash";
-import React, { useRef, useState } from "react";
-import { TextInput } from "react-native";
-import { useTheme } from "../../theme";
-import { InputStyleProps } from "../../theme/types";
-import Container from "../Container";
-import { InputProps } from "./types/types";
+import { get, merge } from 'lodash';
+import React, { useRef, useState } from 'react';
+import { TextInput } from 'react-native';
+import { useTheme } from '../../theme';
+import { InputStyleProps } from '../../theme/types';
+import Container from '../Container';
+import { InputProps } from './types/types';
 
 export const useInputComponent = (initialValue: string) => {
   const [value, setValue] = useState(initialValue);
@@ -47,11 +47,10 @@ const Input: React.FC<InputProps> = ({
   const { secureTextEntry } = themeOverrideProps;
 
   /* Calculate final props based on prority (default -> variant -> direct props) */
-  const finalProps: InputStyleProps = {
-    ...get(theme, "input.default", {}),
-    ...get(theme, `input.${variant}`, {}),
-    ...themeOverrideProps,
-  };
+  const finalProps: InputStyleProps = merge(
+    get(theme, `input.${variant || 'default'}`, {}),
+    themeOverrideProps
+  );
 
   const {
     InnerContainerStyle,
@@ -72,7 +71,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <Container style={OuterContainerStyle}>
       {Label && <Label />}
-      <Container row alignItems='center' style={InnerContainerStyle}>
+      <Container row alignItems="center" style={InnerContainerStyle}>
         {LeftIcon && <LeftIcon />}
         <TextInput
           value={value}
