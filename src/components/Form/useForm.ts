@@ -1,17 +1,26 @@
 import React from 'react';
+import { merge } from 'lodash';
 
-const useForm = (config: any, formConfig: any) => {
+const useForm = (config: any) => {
   const getInitialConfig = () => {
     const configObject: any = {};
 
     Object.keys(config).map((key: any) => {
-      configObject[key] = { ...config[key], typed: false, isValid: true };
+      configObject[key] = {
+        ...config[key],
+        typed: false,
+        isValid: true,
+        shouldValidate: false,
+        setConfig: (newConfig: any) =>
+          setFormFields((prev: any) => ({
+            ...prev,
+            [key]: merge(prev[key], newConfig),
+          })),
+      };
     });
 
     return configObject;
   };
-
-  const [shouldValidate, setshouldValidate] = React.useState(false);
 
   const [formFields, setFormFields] = React.useState(getInitialConfig);
 
@@ -30,10 +39,6 @@ const useForm = (config: any, formConfig: any) => {
   };
 
   const isSubmissionValid = () => {
-    if (!formConfig.validateAfterSubmission) {
-      setshouldValidate(true);
-    }
-
     const newForm = { ...formFields };
     let isValid = true;
 
@@ -49,7 +54,7 @@ const useForm = (config: any, formConfig: any) => {
       newForm[key] = {
         ...formFields[key],
         isValid: isFieldValid,
-        typed: true,
+        shouldValidate: true,
       };
     });
 
@@ -58,9 +63,12 @@ const useForm = (config: any, formConfig: any) => {
     return isValid;
   };
 
-  React.useEffect(() => {
-    // console.log(formFields);
-  }, [formFields]);
+  const setFormField = (keyName: any, newConfig: any) => {
+    setFormFields((prev: any) => ({
+      ...prev,
+      [keyName]: { ...prev[keyName], ...newConfig },
+    }));
+  };
 
   return {
     values,
@@ -68,7 +76,7 @@ const useForm = (config: any, formConfig: any) => {
     setFormFields,
     resetFields,
     isSubmissionValid,
-    shouldValidate,
+    setFormField,
   };
 };
 

@@ -3,27 +3,25 @@ import React, { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 import { useTheme } from '../../theme';
 import { InputStyleProps } from '../../theme/types';
+import { TextInputRefType } from '../../types';
+import useDidMount from '../../utils/hooks/useDidMount';
 import Container from '../Container';
 import { InputProps } from './types/types';
 
 export const useInputComponent = (initialValue: string) => {
-  const [value, setValue] = useState(initialValue);
-  const [isValid, setIsValid] = useState(true);
+  const [{ value, isValid }, setState] = useState({
+    value: initialValue,
+    isValid: true,
+  });
 
-  const inputRef:
-    | string
-    | React.RefObject<TextInput>
-    | ((instance: TextInput | null) => void)
-    | null
-    | undefined = useRef(null);
+  const inputRef: TextInputRefType = useRef(null);
 
   return {
     inputProps: {
       value,
-      setValue,
       isValid,
-      setIsValid,
       inputRef,
+      setState,
     },
   };
 };
@@ -32,14 +30,15 @@ const Input: React.FC<InputProps> = ({
   Label,
   CustomMsg,
   value,
-  setValue,
   isValid,
-  setIsValid,
+  setState,
   inputRef,
   variant,
   validation,
   LeftIcon,
   RightIcon,
+  shouldValidate,
+  extraValidationData,
   ...themeOverrideProps
 }) => {
   const theme = useTheme();
@@ -59,14 +58,24 @@ const Input: React.FC<InputProps> = ({
     ...rest
   } = finalProps;
 
-  console.log(finalProps);
-
   const handleChange = (val: string) => {
-    const isValidated: boolean = validation ? validation(val) : true;
-
-    setValue(val);
-    setIsValid(isValidated);
+    setState({
+      isValid:
+        validation && shouldValidate !== false
+          ? validation(val, extraValidationData)
+          : true,
+      value: val,
+    });
   };
+
+  useDidMount(() => {
+    if (validation && shouldValidate) {
+      setState({
+        value,
+        isValid: validation(value, extraValidationData),
+      });
+    }
+  }, [shouldValidate]);
 
   return (
     <Container style={OuterContainerStyle}>
@@ -83,7 +92,7 @@ const Input: React.FC<InputProps> = ({
         />
         {RightIcon && <RightIcon />}
       </Container>
-      {!isValid && CustomMsg && <CustomMsg />}
+      {shouldValidate !== false && CustomMsg && <CustomMsg isValid={isValid} />}
     </Container>
   );
 };

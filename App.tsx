@@ -6,9 +6,9 @@ import { StatusBar, TouchableOpacity } from 'react-native';
 import InputExample from './examples/input/InputExample';
 import PickerExamples from './examples/picker/PickerExamples';
 import TxtExample from './examples/txt/TxtExample';
+import FormExample from './examples/form/FormExample';
 import StyleThemeExample from './examples/useStylesAndTheme/StylesThemeExample';
 import { Container, createStyles, Txt } from './src';
-import FormExample from './tests/From';
 
 const Stack = createStackNavigator();
 

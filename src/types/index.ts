@@ -1,6 +1,11 @@
 // Styles
 
-import { GestureResponderEvent, StyleProp, TextStyle } from 'react-native';
+import {
+  GestureResponderEvent,
+  StyleProp,
+  TextInput,
+  TextStyle,
+} from 'react-native';
 
 export type FlexJustifyType =
   | 'flex-start'
@@ -22,4 +27,11 @@ export type VariantTypes<T> = keyof NonNullable<T>;
 
 export type TouchableType =
   | ((event: GestureResponderEvent) => void)
+  | undefined;
+
+export type TextInputRefType =
+  | string
+  | React.RefObject<TextInput>
+  | ((instance: TextInput | null) => void)
+  | null
   | undefined;
