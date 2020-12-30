@@ -6,6 +6,7 @@ import { StatusBar, TouchableOpacity } from 'react-native';
 import InputExample from './examples/input/InputExample';
 import PickerExamples from './examples/picker/PickerExamples';
 import TxtExample from './examples/txt/TxtExample';
+import ContainerExample from './examples/containers/ContainerExample'
 import StyleThemeExample from './examples/useStylesAndTheme/StylesThemeExample';
 import { Container, createStyles, Txt } from './src';
 
@@ -54,6 +55,7 @@ const Initial = () => {
       <ExRow name='Txt' />
       <ExRow name='Picker' />
       <ExRow name='Input' />
+      <ExRow name='Container' />
     </Container>
   );
 };
@@ -73,6 +75,7 @@ export default function App() {
             options={{ cardStyle: { backgroundColor: '#fff' } }}
             component={InputExample}
           />
+          <Stack.Screen name='Container' component={ContainerExample} />
         </Stack.Navigator>
       </NavigationContainer>
     </Container>

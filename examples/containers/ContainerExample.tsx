@@ -4,10 +4,10 @@ import { Container, Txt } from '../../src';
 const ContainerExample = () => {
   return (
     <Container grow>
-      <Container border="red" justify="flex-end" alignItems="flex-end">
+      <Container border="red" justify="flex-end" alignItems="flex-end" positionStyle='m-20'>
         <Txt>Text 1</Txt>
       </Container>
-      <Container border centered grow={2}>
+      <Container border centered grow={2} viewType='scrollView'>
         <Txt>Text 2</Txt>
       </Container>
       <Container border="green" row>

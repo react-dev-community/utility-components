@@ -14,3 +14,6 @@ export const sit = <T>(condition: boolean | undefined | null, object: T) =>
 /* zero if undefined */
 export const ziu = (value: number | undefined | null | string) =>
   value ? +value : 0;
+/* helper function for checking type of keys of keyValue */
+export const hasKey = <O>(obj: O, key: keyof any): key is keyof O => {
+  return key in obj}
