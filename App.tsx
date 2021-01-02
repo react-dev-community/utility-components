@@ -6,6 +6,7 @@ import { StatusBar, TouchableOpacity } from 'react-native';
 import InputExample from './examples/input/InputExample';
 import PickerExamples from './examples/picker/PickerExamples';
 import TxtExample from './examples/txt/TxtExample';
+import FormExample from './examples/form/FormExample';
 import StyleThemeExample from './examples/useStylesAndTheme/StylesThemeExample';
 import { Container, createStyles, Txt } from './src';
 
@@ -50,10 +51,11 @@ const Initial = () => {
   const styles = useStyles();
   return (
     <Container grow style={styles.root}>
-      <ExRow name='Styles and Theme' />
-      <ExRow name='Txt' />
-      <ExRow name='Picker' />
-      <ExRow name='Input' />
+      <ExRow name="Styles and Theme" />
+      <ExRow name="Txt" />
+      <ExRow name="Picker" />
+      <ExRow name="Input" />
+      <ExRow name="Form" />
     </Container>
   );
 };
@@ -63,16 +65,16 @@ export default function App() {
     <Container grow>
       <StatusBar hidden />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Examples'>
-          <Stack.Screen name='Examples' component={Initial} />
-          <Stack.Screen name='Styles and Theme' component={StyleThemeExample} />
-          <Stack.Screen name='Txt' component={TxtExample} />
-          <Stack.Screen name='Picker' component={PickerExamples} />
-          <Stack.Screen
-            name='Input'
-            options={{ cardStyle: { backgroundColor: '#fff' } }}
-            component={InputExample}
-          />
+        <Stack.Navigator
+          initialRouteName="Examples"
+          screenOptions={{ cardStyle: { backgroundColor: '#fff' } }}
+        >
+          <Stack.Screen name="Examples" component={Initial} />
+          <Stack.Screen name="Styles and Theme" component={StyleThemeExample} />
+          <Stack.Screen name="Txt" component={TxtExample} />
+          <Stack.Screen name="Picker" component={PickerExamples} />
+          <Stack.Screen name="Input" component={InputExample} />
+          <Stack.Screen name="Form" component={FormExample} />
         </Stack.Navigator>
       </NavigationContainer>
     </Container>

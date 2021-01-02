@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, View, TextInput } from 'react-native';
 import { createTheme, ThemeProvider } from '../../src';
 import Input, { useInputComponent } from '../../src/components/Input';
 import Password from '../../src/components/Input/Password';
@@ -37,6 +37,12 @@ const myTheme = createTheme({
       },
       textInputStyle: { paddingHorizontal: 10 },
     },
+
+    fire: {
+      InnerContainerStyle: {
+        backgroundColor: 'red',
+      },
+    },
   },
 });
 
@@ -50,33 +56,34 @@ const InputExample = () => {
     <ThemeProvider theme={myTheme}>
       <Input
         {...inputProps}
-        Label={() => <LabelComponent content='Email' />}
+        Label={() => <LabelComponent content="Email" />}
         CustomMsg={CustomMessage}
         validation={Validation}
         LeftIcon={() => (
-          <MaterialIcons name='email' size={24} color='#c4c4c4' />
+          <MaterialIcons name="email" size={24} color="#c4c4c4" />
         )}
+        variant="fire"
       />
       {/* Password with custom icons */}
 
       <Password
         {...passwordProps}
         show
-        Label={() => <LabelComponent content='Password with custom icons' />}
-        VisibleIcon={<AntDesign name='eye' size={24} color='black' />}
-        NotVisibleIcon={<Feather name='eye-off' size={24} color='black' />}
+        Label={() => <LabelComponent content="Password with custom icons" />}
+        VisibleIcon={<AntDesign name="eye" size={24} color="black" />}
+        NotVisibleIcon={<Feather name="eye-off" size={24} color="black" />}
       />
 
       {/* Password with default icons */}
       <Password
-        Label={() => <LabelComponent content='Password with default icons' />}
+        Label={() => <LabelComponent content="Password with default icons" />}
         {...passwordProps}
         show
       />
 
       {/* Password with no icons */}
       <Password
-        Label={() => <LabelComponent content='Password with no icons' />}
+        Label={() => <LabelComponent content="Password with no icons" />}
         {...passwordProps}
       />
     </ThemeProvider>

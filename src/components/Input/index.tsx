@@ -1,21 +1,30 @@
-import { get } from 'lodash';
-import React, { useState } from 'react';
+import { get, merge } from 'lodash';
+import React, { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 import { useTheme } from '../../theme';
 import { InputStyleProps } from '../../theme/types';
+import { TextInputRefType } from '../../types';
+import useDidMount from '../../utils/hooks/useDidMount';
 import Container from '../Container';
 import { InputProps } from './types/types';
 
 export const useInputComponent = (initialValue: string) => {
-  const [value, setValue] = useState(initialValue);
-  const [isValid, setIsValid] = useState(true);
+  const [{ value, isValid }, setState] = useState<{
+    value: string | undefined;
+    isValid: boolean;
+  }>({
+    value: initialValue,
+    isValid: true,
+  });
+
+  const inputRef: TextInputRefType = useRef(null);
 
   return {
     inputProps: {
       value,
-      setValue,
       isValid,
-      setIsValid,
+      inputRef,
+      setState,
     },
   };
 };
@@ -24,12 +33,15 @@ const Input: React.FC<InputProps> = ({
   Label,
   CustomMsg,
   value,
-  setValue,
   isValid,
-  setIsValid,
+  setState,
+  inputRef,
+  variant,
   validation,
   LeftIcon,
   RightIcon,
+  shouldValidate,
+  extraValidationData,
   ...themeOverrideProps
 }) => {
   const theme = useTheme();
@@ -37,32 +49,53 @@ const Input: React.FC<InputProps> = ({
   const { secureTextEntry } = themeOverrideProps;
 
   /* Calculate final props based on prority (default -> variant -> direct props) */
-  const finalProps: InputStyleProps = {
-    ...get(theme, 'input.default', {}),
-    ...themeOverrideProps,
-  };
+  const finalProps: InputStyleProps = merge(
+    get(theme, `input.${variant || 'default'}`, {}),
+    themeOverrideProps
+  );
+
+  const {
+    InnerContainerStyle,
+    OuterContainerStyle,
+    textInputStyle,
+    ...rest
+  } = finalProps;
 
   const handleChange = (val: string) => {
-    const isValidated: boolean = validation ? validation(val) : true;
-
-    setValue(val);
-    setIsValid(isValidated);
+    setState({
+      isValid:
+        validation && shouldValidate !== false
+          ? validation(val, extraValidationData)
+          : true,
+      value: val,
+    });
   };
 
+  useDidMount(() => {
+    if (validation && shouldValidate) {
+      setState({
+        value,
+        isValid: validation(value, extraValidationData),
+      });
+    }
+  }, [shouldValidate]);
+
   return (
-    <Container style={finalProps.OuterContainerStyle}>
+    <Container style={OuterContainerStyle}>
       {Label && <Label />}
-      <Container row alignItems="center" style={finalProps.InnerContainerStyle}>
+      <Container row alignItems="center" style={InnerContainerStyle}>
         {LeftIcon && <LeftIcon />}
         <TextInput
           value={value}
           onChangeText={handleChange}
-          style={[{ flex: 1 }, finalProps.textInputStyle]}
+          style={[{ flex: 1 }, textInputStyle]}
           secureTextEntry={secureTextEntry}
+          ref={inputRef}
+          {...rest}
         />
         {RightIcon && <RightIcon />}
       </Container>
-      {!isValid && CustomMsg && <CustomMsg />}
+      {shouldValidate !== false && CustomMsg && <CustomMsg isValid={isValid} />}
     </Container>
   );
 };

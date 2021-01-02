@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, merge } from 'lodash';
 import React from 'react';
 import {
   Dimensions,
@@ -28,7 +28,7 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
   index,
   setVisible,
   visible,
-  setIndex,
+  setPickerState,
   options,
   ...props
 }) => {
@@ -39,19 +39,21 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
    => Non theme props
    */
   const {
-    FooterComponent,
-    HeaderComponent,
+    HeaderComponentProps,
+    FooterComponentProps,
+    LabelComponentProps,
+    MessageComponentProps,
     onPressPickerComponent, // Picker Component onPress override
     extraPickerComponentProps, // Extra Picker Component props
     ...themeOverrideProps
   } = props;
 
   /* Calculate final props based on prority (default -> variant -> direct props) */
-  const finalProps: typeof themeOverrideProps = {
-    ...get(theme, 'picker.default', {}),
-    ...get(theme, `picker.${props.variant}`, {}),
-    ...themeOverrideProps,
-  };
+
+  const finalProps: typeof themeOverrideProps = merge(
+    { ...get(theme, `picker.${props.variant || 'default'}`, {}) },
+    themeOverrideProps
+  );
 
   const myRef = React.createRef<View>(); // Picker Button Component wrapper ref
 
@@ -76,6 +78,10 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
   }, [position]);
 
   const {
+    FooterComponent,
+    HeaderComponent,
+    LabelComponent,
+    MessageComponent,
     PickerComponent = DefaultPickerComponent,
     bgContainerStyle, // Outermost container, background
     rootContainerStyle, // Outermost Picker Container (Root)
@@ -106,8 +112,7 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
           if (onPressPickerComponent) {
             onPressPickerComponent?.(idx, option, e);
           } else {
-            setIndex(idx);
-            setVisible(false);
+            setPickerState({ index: idx, visible: false });
           }
         }}
         key={idx}
@@ -176,10 +181,16 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
   return (
     <>
       <View ref={myRef} onLayout={() => {}}>
-        <PickerButton
-          handlePress={handlePressPickerButton}
-          option={options[index]}
-        />
+        <Container>
+          {LabelComponent && <LabelComponent {...LabelComponentProps} />}
+          <PickerButton
+            handlePress={handlePressPickerButton}
+            option={options[index]}
+          />
+          {MessageComponent && (
+            <MessageComponent isValid={true} {...MessageComponentProps} />
+          )}
+        </Container>
       </View>
       <Modal
         visible={visible}
@@ -224,7 +235,7 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
               });
             }}
           >
-            {HeaderComponent}
+            {HeaderComponent && <HeaderComponent {...HeaderComponentProps} />}
             <Container
               style={{
                 ...pickerContainerStyle,
@@ -232,7 +243,7 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
             >
               {options.map(renderPCWrapper)}
             </Container>
-            {FooterComponent}
+            {FooterComponent && <FooterComponent {...FooterComponentProps} />}
           </Container>
         </Container>
       </Modal>

@@ -53,7 +53,7 @@ const PickerComponent = ({
 }: PickerComponentProps) => {
   const styles = useStyles({ isActive });
 
-  console.log(extraProps);
+  console.log(extraProps, 'extra props');
 
   return (
     <Txt style={styles.customPickerRow1}>
@@ -179,10 +179,12 @@ const PickerExamples = () => {
               overrideTouchable={false}
               modalProps={{ animationType: 'fade' }}
               // Following props can only be passed as props
-              HeaderComponent={<HeaderComponent value={currentOption2.value} />}
-              FooterComponent={
+              HeaderComponent={() => (
+                <HeaderComponent value={currentOption2.value} />
+              )}
+              FooterComponent={() => (
                 <Txt onPress={() => pickerProps2.setVisible(false)}>Cancle</Txt>
-              }
+              )}
               extraPickerComponentProps={{ myExtraProp: 'value' }}
               onPressPickerComponent={(idx) => {
                 console.log('Hello');
