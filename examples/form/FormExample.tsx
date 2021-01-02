@@ -8,6 +8,7 @@ import {
   ThemeProvider,
   Container,
 } from '../../src';
+import FormField from '../../src/components/Form/FormField';
 
 const LabelComponent: React.FC<{ content: string }> = ({ content }) => {
   return (
@@ -77,7 +78,24 @@ const FromExample = () => {
     <ThemeProvider theme={myTheme}>
       <Form form={form}>
         <Container>
-          <InputField
+          <FormField
+            inputComponent="TextInput"
+            componentProps={{
+              InnerContainerStyle: {
+                borderColor: !fields.firstName.shouldValidate
+                  ? 'dodgerblue'
+                  : fields.firstName.isValid
+                  ? 'green'
+                  : 'red',
+              },
+              onBlur: () =>
+                fields.firstName.setConfig({
+                  shouldValidate: true,
+                }),
+            }}
+            keyName="firstName"
+          />
+          {/* <InputField
             keyName="firstName"
             InnerContainerStyle={{
               borderColor: !fields.firstName.shouldValidate
@@ -91,7 +109,7 @@ const FromExample = () => {
                 shouldValidate: true,
               })
             }
-          />
+          /> */}
           <InputField
             keyName="lastName"
             InnerContainerStyle={{

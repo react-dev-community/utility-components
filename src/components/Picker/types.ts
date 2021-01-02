@@ -18,10 +18,16 @@ export interface PickerThemeOverrideProps {
   overrideTouchable?: boolean;
   sticky?: boolean;
   align?: 'top' | 'right' | 'left' | 'bottom';
+  HeaderComponent?: React.FC<any>;
+  FooterComponent?: React.FC<any>;
+  LabelComponent?: React.FC<any>;
+  MessageComponent?: React.FC<any>;
 }
 export interface PickerProps extends PickerThemeOverrideProps {
-  HeaderComponent?: JSX.Element;
-  FooterComponent?: JSX.Element;
+  HeaderComponentProps?: object;
+  FooterComponentProps?: object;
+  LabelComponentProps?: object;
+  MessageComponentProps?: object;
   onPressPickerComponent?: (
     idx: number,
     option: defaultOptionType,
@@ -32,8 +38,14 @@ export interface PickerProps extends PickerThemeOverrideProps {
 
 export interface PropsFromHook {
   visible: boolean;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   index: number;
-  setIndex: React.Dispatch<React.SetStateAction<number>>;
   options: defaultOptionType[];
+  setVisible: (flag: boolean) => void;
+  setIndex: (idx: number) => void;
+  setPickerState: React.Dispatch<
+    React.SetStateAction<{
+      index: number;
+      visible: boolean;
+    }>
+  >;
 }

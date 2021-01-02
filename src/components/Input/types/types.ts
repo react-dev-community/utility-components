@@ -1,24 +1,20 @@
-import { StyleProp, TextInput, TextInputProps, TextStyle } from 'react-native';
+import { StyleProp, TextInputProps, TextStyle } from 'react-native';
 import { ContainerStyleProps } from '../../../theme/types';
+import { TextInputRefType } from './../../../types/index';
 
 export interface InputProps extends TextInputProps {
   Label?: React.FC;
-  validation?: (val: string | undefined, extraValidationData?: any) => boolean;
+  validation?: (val: string, extraValidationData?: any) => boolean;
   CustomMsg?: React.FC<{ isValid: boolean }>;
   textInputStyle?: StyleProp<TextStyle> | null;
   isValid: boolean;
   setState: React.Dispatch<
     React.SetStateAction<{
       value: string | undefined;
-      isValid: boolean | undefined;
+      isValid: boolean;
     }>
   >;
-  inputRef?:
-    | string
-    | ((instance: TextInput | null) => void)
-    | React.RefObject<TextInput>
-    | null
-    | undefined;
+  inputRef?: TextInputRefType;
   variant?: string;
   LeftIcon?: React.FC;
   RightIcon?: React.FC;

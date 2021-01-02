@@ -1,17 +1,18 @@
 import React from 'react';
-import Input from '..';
 import { TextInputRefType } from '../../../types';
-import { FormContext } from '../../Form';
 import { InputProps } from '../types/types';
-
+import FormContext from '../../Form/FormContext';
+import Input from '..';
 interface Props extends InputProps {
   keyName: string;
 }
 
-const InputField: React.FC<Omit<
+export type InputFieldProps = Omit<
   Props,
   'value' | 'setState' | 'isValid' | 'validation'
->> = ({ keyName, ...restProps }) => {
+>;
+
+const InputField: React.FC<InputFieldProps> = ({ keyName, ...restProps }) => {
   const form = React.useContext(FormContext);
 
   const formFields = form.formFields();
@@ -55,4 +56,4 @@ const InputField: React.FC<Omit<
   );
 };
 
-export default React.memo(InputField);
+export default InputField;

@@ -9,7 +9,10 @@ import Container from '../Container';
 import { InputProps } from './types/types';
 
 export const useInputComponent = (initialValue: string) => {
-  const [{ value, isValid }, setState] = useState({
+  const [{ value, isValid }, setState] = useState<{
+    value: string | undefined;
+    isValid: boolean;
+  }>({
     value: initialValue,
     isValid: true,
   });
