@@ -2,9 +2,9 @@ import { defaultOptionType } from './types';
 
 import React from 'react';
 
-const usePicker = (options: defaultOptionType[]) => {
+const usePicker = (options: defaultOptionType[], intialIndex?: number) => {
   const [{ index, visible }, setPickerState] = React.useState({
-    index: 0,
+    index: intialIndex ?? null,
     visible: false,
   });
 
@@ -23,7 +23,7 @@ const usePicker = (options: defaultOptionType[]) => {
       setIndex,
       setPickerState,
     },
-    currentOption: options[index],
+    currentOption: index !== null ? options[index] : null,
   };
 };
 

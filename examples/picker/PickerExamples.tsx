@@ -8,6 +8,7 @@ import {
   ThemeProvider,
   Txt,
   usePicker,
+  vou,
 } from '../../src';
 import { PickerComponentProps } from '../../src/components/Picker/types';
 
@@ -42,6 +43,7 @@ const useStyles = createStyles((props: any) => ({
     paddingHorizontal: 16,
     paddingVertical: 8,
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
 }));
 
@@ -141,16 +143,16 @@ const PickerExamples = () => {
   const {
     pickerProps: pickerProps2,
     currentOption: currentOption2,
-  } = usePicker(options);
+  } = usePicker(options, 0);
 
-  const { pickerProps: pickerProps3 } = usePicker(options);
+  const { pickerProps: pickerProps3 } = usePicker(options, 0);
 
-  const { pickerProps: pickerProps4 } = usePicker(options);
+  const { pickerProps: pickerProps4 } = usePicker(options, 0);
 
   const {
     pickerProps: pickerPropsSticky,
     currentOption: currentOptionSticky,
-  } = usePicker(optionsSticky);
+  } = usePicker(optionsSticky, 1);
 
   return (
     <ThemeProvider theme={themeValue}>
@@ -160,10 +162,18 @@ const PickerExamples = () => {
           <Container style={styles.pickerRow} row>
             <Txt>Default Picker = </Txt>
             {/* Default Picker Component */}
-            <Picker {...pickerProps1} />
+            <Picker
+              {...pickerProps1}
+              MessageComponent={vou(!currentOption1, () => (
+                <Txt style={{ color: 'red', fontSize: 10 }}>
+                  Please select option
+                </Txt>
+              ))}
+            />
             {/* *** */}
             <Txt>
-              (Title:- {currentOption1.title}, Value:- {currentOption1.value})
+              (Title:- {currentOption1?.title || 'Not Selected'}, Value:-{' '}
+              {currentOption1?.value || 'Not Selected'})
             </Txt>
           </Container>
           <Container style={styles.pickerRow} row>
@@ -180,7 +190,9 @@ const PickerExamples = () => {
               modalProps={{ animationType: 'fade' }}
               // Following props can only be passed as props
               HeaderComponent={() => (
-                <HeaderComponent value={currentOption2.value} />
+                <HeaderComponent
+                  value={currentOption2?.value || 'Not Selected'}
+                />
               )}
               FooterComponent={() => (
                 <Txt onPress={() => pickerProps2.setVisible(false)}>Cancle</Txt>
@@ -218,7 +230,7 @@ const PickerExamples = () => {
             <Picker
               {...pickerProps4}
               sticky
-              align={currentOptionSticky.value as any}
+              align={(currentOptionSticky?.value as any) || 'bottom'}
             />
             {/* *** */}
           </Container>

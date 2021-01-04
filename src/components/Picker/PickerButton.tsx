@@ -10,7 +10,7 @@ import { defaultOptionType } from './types';
 
 interface PickerButtonProps {
   handlePress: TouchableType;
-  option: defaultOptionType;
+  option: defaultOptionType | null;
 }
 
 const PickerButton: React.FC<PickerButtonProps> = ({ handlePress, option }) => {
@@ -23,9 +23,12 @@ const PickerButton: React.FC<PickerButtonProps> = ({ handlePress, option }) => {
         paddingHorizontal: 16,
         paddingVertical: 4,
         backgroundColor: 'white',
+        width: 130,
       }}
     >
-      <Txt>{option.title}</Txt>
+      <Txt style={{ color: !option ? '#ccc' : 'black' }}>
+        {option?.title || 'Please Select'}
+      </Txt>
     </TouchableOpacity>
   );
 };

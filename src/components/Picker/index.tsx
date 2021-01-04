@@ -13,7 +13,7 @@ import useDidMount from '../../utils/hooks/useDidMount';
 import Container from '../Container';
 import DefaultPickerComponent from './DefaultPickerComponent';
 import PickerButton from './PickerButton';
-import { defaultOptionType, PickerProps, PropsFromHook } from './types';
+import { defaultOptionType, PickerProps, PickerPropsFromHook } from './types';
 
 const dimensions = Dimensions.get('window');
 
@@ -24,7 +24,7 @@ const initialPosition = {
   height: 0,
 };
 
-const Picker: React.FC<PickerProps & PropsFromHook> = ({
+const Picker: React.FC<PickerProps & PickerPropsFromHook> = ({
   index,
   setVisible,
   visible,
@@ -86,6 +86,7 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
     bgContainerStyle, // Outermost container, background
     rootContainerStyle, // Outermost Picker Container (Root)
     pickerContainerStyle, // Container containing Picker Components
+    buttonContainerStyle,
     modalProps,
     overrideTouchable, // flag if developer needs to overide Touchable Wrapper of PC.
   } = finalProps;
@@ -180,18 +181,21 @@ const Picker: React.FC<PickerProps & PropsFromHook> = ({
 
   return (
     <>
-      <View ref={myRef} onLayout={() => {}}>
-        <Container>
-          {LabelComponent && <LabelComponent {...LabelComponentProps} />}
+      <Container style={buttonContainerStyle}>
+        {LabelComponent && <LabelComponent {...LabelComponentProps} />}
+        <View ref={myRef} onLayout={() => {}}>
           <PickerButton
             handlePress={handlePressPickerButton}
-            option={options[index]}
+            option={index != null ? options[index] : null}
           />
-          {MessageComponent && (
-            <MessageComponent isValid={true} {...MessageComponentProps} />
-          )}
-        </Container>
-      </View>
+        </View>
+        {MessageComponent && (
+          <MessageComponent
+            isValid={index !== null}
+            {...MessageComponentProps}
+          />
+        )}
+      </Container>
       <Modal
         visible={visible}
         onRequestClose={() => setVisible(false)}
