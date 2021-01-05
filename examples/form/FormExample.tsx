@@ -157,11 +157,11 @@ const FromExample = () => {
         <Container>
           <InputField
             keyName="firstName"
-            onBlur={() =>
-              fields.firstName.setConfig({
-                shouldValidate: true,
-              })
-            }
+            // onBlur={() =>
+            //   fields.firstName.setConfig({
+            //     shouldValidate: true,
+            //   })
+            // }
           />
           <InputField keyName="lastName" />
           <InputField
