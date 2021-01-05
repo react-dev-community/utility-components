@@ -1,8 +1,8 @@
 import React from 'react';
-import { TextInputRefType } from '../../../types';
-import { InputProps } from '../types/types';
-import FormContext from '../../Form/FormContext';
 import Input from '..';
+import { TextInputRefType } from '../../../types';
+import useFormField from '../../Form/useFormField';
+import { InputProps } from '../types/types';
 interface Props extends InputProps {
   keyName: string;
 }
@@ -13,13 +13,7 @@ export type InputFieldProps = Omit<
 >;
 
 const InputField: React.FC<InputFieldProps> = ({ keyName, ...restProps }) => {
-  const form = React.useContext(FormContext);
-
-  const formFields = form.formFields();
-  const setFormFields = form.setFormFields;
-
-  const field = formFields[keyName];
-
+  const { field, form, setFormFields } = useFormField(keyName);
   const ref: TextInputRefType = React.useRef(null);
 
   return (
@@ -27,7 +21,7 @@ const InputField: React.FC<InputFieldProps> = ({ keyName, ...restProps }) => {
       {...restProps}
       {...field.props}
       inputRef={ref}
-      extraValidationData={form.values()}
+      extraValidationData={form}
       value={field.value}
       isValid={field.isValid}
       shouldValidate={field.shouldValidate}
@@ -36,19 +30,20 @@ const InputField: React.FC<InputFieldProps> = ({ keyName, ...restProps }) => {
           // If setState is called with prev Function
           setFormFields((prev: any) => ({
             ...prev,
+            touched: true,
             [keyName]: {
               ...prev[keyName],
-              isValid: field.props.validation(
-                prev[keyName].value,
-                form.values()
-              ),
+              ...arg({
+                value: prev[keyName].value,
+                isValid: prev[keyName].isValid,
+              }),
             },
           }));
         } else {
           // If value is directly passed
           setFormFields((prev: any) => ({
             ...prev,
-            [keyName]: { ...prev[keyName], typed: true, ...arg },
+            [keyName]: { ...prev[keyName], touched: true, ...arg },
           }));
         }
       }}

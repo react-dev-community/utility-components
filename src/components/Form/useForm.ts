@@ -1,6 +1,20 @@
 import React from 'react';
 import { merge } from 'lodash';
 
+const getConfig = (type: any, field: any) => {
+  switch (type) {
+    case 'Picker':
+      return {
+        value: field.props?.options?.[field.index]?.value || null,
+        index: field.props?.index,
+        visible: field.props?.visible || false,
+      };
+    case 'TextInput':
+    default:
+      return { value: field.props?.value || '' };
+  }
+};
+
 const useForm = (config: any) => {
   const getInitialConfig = () => {
     const configObject: any = {};
@@ -8,7 +22,8 @@ const useForm = (config: any) => {
     Object.keys(config).map((key: any) => {
       configObject[key] = {
         ...config[key],
-        typed: false,
+        ...getConfig(config[key].type, config[key]),
+        touched: false,
         isValid: true,
         shouldValidate: false,
         setConfig: (newConfig: any) =>
@@ -43,11 +58,12 @@ const useForm = (config: any) => {
     let isValid = true;
 
     Object.keys(formFields).map((key: any) => {
-      const isFieldValid = formFields[key].props.validation?.(
-        formFields[key].value
+      const isFieldValid = formFields[key].props?.validation?.(
+        formFields[key].value,
+        form
       );
 
-      if (!isFieldValid) {
+      if (isFieldValid === false) {
         isValid = false;
       }
 
@@ -70,7 +86,7 @@ const useForm = (config: any) => {
     }));
   };
 
-  return {
+  const form = {
     values,
     formFields: () => formFields,
     setFormFields,
@@ -78,6 +94,8 @@ const useForm = (config: any) => {
     isSubmissionValid,
     setFormField,
   };
+
+  return form;
 };
 
 export default useForm;
