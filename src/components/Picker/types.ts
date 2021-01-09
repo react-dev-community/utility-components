@@ -1,4 +1,5 @@
 import { GestureResponderEvent, ModalProps, ViewStyle } from 'react-native';
+import usePicker from './usePicker';
 
 export type defaultOptionType = { title: string; value: string };
 
@@ -13,6 +14,7 @@ export interface PickerThemeOverrideProps {
   variant?: string;
   pickerContainerStyle?: ViewStyle;
   rootContainerStyle?: ViewStyle;
+  buttonContainerStyle?: ViewStyle;
   bgContainerStyle?: ViewStyle;
   modalProps?: ModalProps;
   overrideTouchable?: boolean;
@@ -21,7 +23,7 @@ export interface PickerThemeOverrideProps {
   HeaderComponent?: React.FC<any>;
   FooterComponent?: React.FC<any>;
   LabelComponent?: React.FC<any>;
-  MessageComponent?: React.FC<any>;
+  MessageComponent?: React.FC<{ isValid: boolean }>;
 }
 export interface PickerProps extends PickerThemeOverrideProps {
   HeaderComponentProps?: object;
@@ -36,16 +38,4 @@ export interface PickerProps extends PickerThemeOverrideProps {
   extraPickerComponentProps?: any;
 }
 
-export interface PropsFromHook {
-  visible: boolean;
-  index: number;
-  options: defaultOptionType[];
-  setVisible: (flag: boolean) => void;
-  setIndex: (idx: number) => void;
-  setPickerState: React.Dispatch<
-    React.SetStateAction<{
-      index: number;
-      visible: boolean;
-    }>
-  >;
-}
+export type PickerPropsFromHook = ReturnType<typeof usePicker>['pickerProps'];
