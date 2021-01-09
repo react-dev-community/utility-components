@@ -1,9 +1,9 @@
-import { Entypo } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Input from '..';
-import { tof, vou } from '../../../utils';
-import { InputProps } from '../types/types';
+import { Entypo } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Input from "..";
+import { tof, vou } from "../../../utils";
+import { InputProps } from "../types/types";
 
 interface Props extends InputProps {
   show?: boolean | undefined;
@@ -35,7 +35,7 @@ const Password: React.FC<Props> = ({
     vou(show, () => (
       <TouchableOpacity onPress={() => setToShow((prev) => !prev)}>
         <Entypo
-          name={`eye${toShow ? '' : '-with-line'}`}
+          name={`eye${toShow ? "" : "-with-line"}`}
           size={20}
           color='black'
         />

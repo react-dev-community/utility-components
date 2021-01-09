@@ -1,12 +1,12 @@
-import { get, merge } from 'lodash';
-import React, { useRef, useState } from 'react';
-import { TextInput } from 'react-native';
-import { useTheme } from '../../theme';
-import { InputStyleProps } from '../../theme/types';
-import { TextInputRefType } from '../../types';
-import useDidMount from '../../utils/hooks/useDidMount';
-import Container from '../Container';
-import { InputProps } from './types/types';
+import { get, merge } from "lodash";
+import React, { useRef, useState } from "react";
+import { TextInput } from "react-native";
+import { useTheme } from "../../theme";
+
+import { TextInputRefType } from "../../types";
+import useDidMount from "../../utils/hooks/useDidMount";
+import Container from "../Container";
+import { InputProps, InputStyleProps } from "./types/types";
 
 export const useInputComponent = (initialValue: string) => {
   const [{ value, isValid }, setState] = useState<{
@@ -30,7 +30,7 @@ export const useInputComponent = (initialValue: string) => {
 };
 
 const Input: React.FC<InputProps> = ({
-  Label,
+  labelProps,
   CustomMsg,
   value,
   isValid,
@@ -40,17 +40,16 @@ const Input: React.FC<InputProps> = ({
   validation,
   LeftIcon,
   RightIcon,
-  shouldValidate,
+  shouldValidate = false,
+  secureTextEntry = false,
   extraValidationData,
   ...themeOverrideProps
 }) => {
   const theme = useTheme();
 
-  const { secureTextEntry } = themeOverrideProps;
-
   /* Calculate final props based on prority (default -> variant -> direct props) */
   const finalProps: InputStyleProps = merge(
-    get(theme, `input.${variant || 'default'}`, {}),
+    { ...get(theme, `input.${variant || "default"}`, {}) },
     themeOverrideProps
   );
 
@@ -58,6 +57,7 @@ const Input: React.FC<InputProps> = ({
     InnerContainerStyle,
     OuterContainerStyle,
     textInputStyle,
+    LabelComponent,
     ...rest
   } = finalProps;
 
@@ -80,17 +80,23 @@ const Input: React.FC<InputProps> = ({
     }
   }, [shouldValidate]);
 
+  //console.log(inputRef.current);
+
+  // const { secureTextEntry } = rest;
+
+  //console.log("s " + secureTextEntry);
+
   return (
     <Container style={OuterContainerStyle}>
-      {Label && <Label />}
-      <Container row alignItems="center" style={InnerContainerStyle}>
+      {LabelComponent && <LabelComponent {...labelProps} />}
+      <Container row alignItems='center' style={InnerContainerStyle}>
         {LeftIcon && <LeftIcon />}
         <TextInput
           value={value}
           onChangeText={handleChange}
           style={[{ flex: 1 }, textInputStyle]}
-          secureTextEntry={secureTextEntry}
           ref={inputRef}
+          secureTextEntry={secureTextEntry}
           {...rest}
         />
         {RightIcon && <RightIcon />}
