@@ -9,6 +9,12 @@ import {
   LabelComponentProps,
 } from '../../src/components/Input/types/types';
 
+/**
+ * Custom Label component -
+ * Props - {
+ *  content : string
+ * }
+ */
 const LabelComponent: React.FC<LabelComponentProps> = ({ content }) => {
   return (
     <View>
@@ -17,11 +23,20 @@ const LabelComponent: React.FC<LabelComponentProps> = ({ content }) => {
   );
 };
 
+/**
+ * Custom Label component -
+ * Props - {
+ *  content : string,
+ * isValid : boolean // Passed from Input Component based on validation state
+ * }
+ */
 const CustomMessage: React.FC<CustomMsgProps> = ({ isValid, content }) => {
   if (!isValid) {
     return (
       <View>
-        <Text style={{ color: 'red' }}>{content}</Text>
+        <Text style={{ color: 'red' }}>
+          Theme message component : {content}
+        </Text>
       </View>
     );
   }
@@ -34,12 +49,6 @@ const myTheme = createTheme({
     default: {
       LabelComponent,
       CustomMsg: CustomMessage,
-      LabelProps: {
-        content: 'Label from Theme',
-      },
-      CustomMsgProps: {
-        content: 'Message from Theme',
-      },
       OuterContainerStyle: { padding: 15 },
       InnerContainerStyle: {
         borderColor: 'dodgerblue',
@@ -70,11 +79,19 @@ const InputExample = () => {
 
   return (
     <ThemeProvider theme={myTheme}>
+      {/*
+        Input with CustomMsg used from theme
+        and LabelComponent passed as prop
+        */}
       <Input
         {...inputProps}
+        LabelComponent={({ content }) => (
+          <View>
+            <Text style={{ color: 'green' }}>{content}</Text>
+          </View>
+        )}
         LabelProps={{ content: 'Email from 1st' }}
-        CustomMsg={CustomMessage}
-        CustomMsgProps={{ content: 'Message from Prop' }}
+        CustomMsgProps={{ content: 'Message from 1st' }}
         shouldValidate
         validation={Validation}
         LeftIcon={() => (
@@ -82,9 +99,23 @@ const InputExample = () => {
         )}
       />
 
+      {/*
+        Input with CustomMsg passed as a prop
+        and LabelComponent used from theme
+        */}
       <Input
         {...inputProps2}
-        CustomMsg={CustomMessage}
+        CustomMsg={({ content, isValid }) => {
+          return !isValid ? (
+            <View>
+              <Text style={{ color: 'pink' }}>
+                Custom message component : {content}
+              </Text>
+            </View>
+          ) : null;
+        }}
+        LabelProps={{ content: 'Email from 2nd' }}
+        CustomMsgProps={{ content: 'Message from 2nd' }}
         shouldValidate
         validation={Validation}
         LeftIcon={() => (
@@ -92,7 +123,7 @@ const InputExample = () => {
         )}
       />
 
-      {/* <Password
+      <Password
         {...passwordProps}
         show
         LabelComponent={() => (
@@ -100,7 +131,7 @@ const InputExample = () => {
         )}
         VisibleIcon={<AntDesign name='eye' size={24} color='black' />}
         NotVisibleIcon={<Feather name='eye-off' size={24} color='black' />}
-      /> */}
+      />
     </ThemeProvider>
   );
 };

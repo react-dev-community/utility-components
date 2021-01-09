@@ -16,8 +16,7 @@ export interface InputStyleProps {
   InnerContainerStyle?: ContainerStyleProps;
   textInputStyle?: StyleProp<TextStyle> | null;
   LabelComponent?: React.FC<LabelComponentProps>;
-  LabelProps?: LabelComponentProps;
-  CustomMsgProps?: CustomMsgProps;
+
   CustomMsg?: React.FC<CustomMsgProps>;
 }
 
@@ -40,4 +39,6 @@ export interface InputProps extends blankInterface {
   RightIcon?: React.FC;
   shouldValidate?: boolean;
   extraValidationData?: any;
+  LabelProps?: LabelComponentProps;
+  CustomMsgProps?: Omit<CustomMsgProps, 'isValid'>;
 }

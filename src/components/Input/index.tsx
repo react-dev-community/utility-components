@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get, merge } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 import { useTheme } from '../../theme';
@@ -30,7 +30,6 @@ export const useInputComponent = (initialValue: string) => {
 };
 
 const Input: React.FC<InputProps> = ({
-  CustomMsg,
   value,
   isValid,
   setState,
@@ -42,21 +41,27 @@ const Input: React.FC<InputProps> = ({
   shouldValidate = false,
   secureTextEntry = false,
   extraValidationData,
+  LabelProps,
+  CustomMsgProps,
   ...themeOverrideProps
 }) => {
   const theme = useTheme();
-  console.log(_.get(theme, `input.${variant || 'default'}`, {}));
-  /* Calculate final props based on prority (default -> variant -> direct props) */
-  const variantProps = { ..._.get(theme, `input.${variant || 'default'}`, {}) };
-  const finalProps: InputStyleProps = _.merge(variantProps, themeOverrideProps);
 
+  /* Calculate final props based on prority (default -> variant -> direct props) */
+  const finalProps: InputStyleProps = merge(
+    { ...get(theme, `input.${variant || 'default'}`, {}) },
+    themeOverrideProps
+  );
+
+  /**
+   * All the theme related props extracted after merging with overriden props here
+   */
   const {
     InnerContainerStyle,
     OuterContainerStyle,
     textInputStyle,
     LabelComponent,
-    LabelProps,
-    CustomMsgProps,
+    CustomMsg,
     ...rest
   } = finalProps;
 
