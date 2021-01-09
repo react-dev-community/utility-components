@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get, merge } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 import { useTheme } from '../../theme';
@@ -45,10 +45,12 @@ const Input: React.FC<InputProps> = ({
   ...themeOverrideProps
 }) => {
   const theme = useTheme();
-  console.log(_.get(theme, `input.${variant || 'default'}`, {}));
+  console.log({ ...get(theme, `input.${variant || 'default'}`, {}) });
   /* Calculate final props based on prority (default -> variant -> direct props) */
-  const variantProps = { ..._.get(theme, `input.${variant || 'default'}`, {}) };
-  const finalProps: InputStyleProps = _.merge(variantProps, themeOverrideProps);
+  const finalProps: InputStyleProps = merge(
+    { ...get(theme, `input.${variant || 'default'}`, {}) },
+    themeOverrideProps
+  );
 
   const {
     InnerContainerStyle,
