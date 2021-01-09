@@ -1,12 +1,12 @@
-import { get, merge } from "lodash";
-import React, { useRef, useState } from "react";
-import { TextInput } from "react-native";
-import { useTheme } from "../../theme";
+import _ from 'lodash';
+import React, { useRef, useState } from 'react';
+import { TextInput } from 'react-native';
+import { useTheme } from '../../theme';
 
-import { TextInputRefType } from "../../types";
-import useDidMount from "../../utils/hooks/useDidMount";
-import Container from "../Container";
-import { InputProps, InputStyleProps } from "./types/types";
+import { TextInputRefType } from '../../types';
+import useDidMount from '../../utils/hooks/useDidMount';
+import Container from '../Container';
+import { InputProps, InputStyleProps } from './types/types';
 
 export const useInputComponent = (initialValue: string) => {
   const [{ value, isValid }, setState] = useState<{
@@ -30,7 +30,6 @@ export const useInputComponent = (initialValue: string) => {
 };
 
 const Input: React.FC<InputProps> = ({
-  labelProps,
   CustomMsg,
   value,
   isValid,
@@ -46,18 +45,18 @@ const Input: React.FC<InputProps> = ({
   ...themeOverrideProps
 }) => {
   const theme = useTheme();
-
+  console.log(_.get(theme, `input.${variant || 'default'}`, {}));
   /* Calculate final props based on prority (default -> variant -> direct props) */
-  const finalProps: InputStyleProps = merge(
-    { ...get(theme, `input.${variant || "default"}`, {}) },
-    themeOverrideProps
-  );
+  const variantProps = { ..._.get(theme, `input.${variant || 'default'}`, {}) };
+  const finalProps: InputStyleProps = _.merge(variantProps, themeOverrideProps);
 
   const {
     InnerContainerStyle,
     OuterContainerStyle,
     textInputStyle,
     LabelComponent,
+    LabelProps,
+    CustomMsgProps,
     ...rest
   } = finalProps;
 
@@ -80,15 +79,9 @@ const Input: React.FC<InputProps> = ({
     }
   }, [shouldValidate]);
 
-  //console.log(inputRef.current);
-
-  // const { secureTextEntry } = rest;
-
-  //console.log("s " + secureTextEntry);
-
   return (
     <Container style={OuterContainerStyle}>
-      {LabelComponent && <LabelComponent {...labelProps} />}
+      {LabelComponent && <LabelComponent {...LabelProps} />}
       <Container row alignItems='center' style={InnerContainerStyle}>
         {LeftIcon && <LeftIcon />}
         <TextInput
@@ -101,7 +94,9 @@ const Input: React.FC<InputProps> = ({
         />
         {RightIcon && <RightIcon />}
       </Container>
-      {shouldValidate !== false && CustomMsg && <CustomMsg isValid={isValid} />}
+      {shouldValidate !== false && CustomMsg && (
+        <CustomMsg isValid={isValid} {...CustomMsgProps} />
+      )}
     </Container>
   );
 };
