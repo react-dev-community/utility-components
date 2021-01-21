@@ -1,13 +1,21 @@
-import { MaterialIcons } from '@expo/vector-icons';
-import React, { useEffect } from 'react';
-import { Text, View, TextInput } from 'react-native';
+import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
+import { Text, View } from 'react-native';
 import { createTheme, ThemeProvider } from '../../src';
 import Input, { useInputComponent } from '../../src/components/Input';
 import Password from '../../src/components/Input/Password';
-import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
+import {
+  CustomMsgProps,
+  LabelComponentProps,
+} from '../../src/components/Input/types/types';
 
-const LabelComponent: React.FC<{ content: string }> = ({ content }) => {
+/**
+ * Custom Label component -
+ * Props - {
+ *  content : string
+ * }
+ */
+const LabelComponent: React.FC<LabelComponentProps> = ({ content }) => {
   return (
     <View>
       <Text style={{ color: 'dodgerblue' }}>{content}</Text>
@@ -15,17 +23,32 @@ const LabelComponent: React.FC<{ content: string }> = ({ content }) => {
   );
 };
 
-const CustomMessage: React.FC = () => {
-  return (
-    <View>
-      <Text style={{ color: 'red' }}>Length is less than 6</Text>
-    </View>
-  );
+/**
+ * Custom Label component -
+ * Props - {
+ *  content : string,
+ * isValid : boolean // Passed from Input Component based on validation state
+ * }
+ */
+const CustomMessage: React.FC<CustomMsgProps> = ({ isValid, content }) => {
+  if (!isValid) {
+    return (
+      <View>
+        <Text style={{ color: 'red' }}>
+          Theme message component : {content}
+        </Text>
+      </View>
+    );
+  }
+
+  return null;
 };
 
 const myTheme = createTheme({
   input: {
     default: {
+      LabelComponent,
+      CustomMsg: CustomMessage,
       OuterContainerStyle: { padding: 15 },
       InnerContainerStyle: {
         borderColor: 'dodgerblue',
@@ -48,43 +71,66 @@ const myTheme = createTheme({
 
 const InputExample = () => {
   const { inputProps } = useInputComponent('Initial Value');
+  const { inputProps: inputProps2 } = useInputComponent('Initial Value 2');
   const { inputProps: passwordProps } = useInputComponent('Password');
 
-  const Validation = (val: string): boolean => val.length >= 6;
+  const Validation = (val: string, extraValidationData: any): boolean =>
+    val.length >= 6;
 
   return (
     <ThemeProvider theme={myTheme}>
+      {/*
+        Input with CustomMsg used from theme
+        and LabelComponent passed as prop
+        */}
       <Input
         {...inputProps}
-        Label={() => <LabelComponent content="Email" />}
-        CustomMsg={CustomMessage}
+        LabelComponent={({ content }) => (
+          <View>
+            <Text style={{ color: 'green' }}>{content}</Text>
+          </View>
+        )}
+        LabelProps={{ content: 'Email from 1st' }}
+        CustomMsgProps={{ content: 'Message from 1st' }}
+        shouldValidate
         validation={Validation}
         LeftIcon={() => (
-          <MaterialIcons name="email" size={24} color="#c4c4c4" />
+          <MaterialIcons name='email' size={24} color='#c4c4c4' />
         )}
-        variant="fire"
       />
-      {/* Password with custom icons */}
+
+      {/*
+        Input with CustomMsg passed as a prop
+        and LabelComponent used from theme
+        */}
+      <Input
+        {...inputProps2}
+        CustomMsg={({ content, isValid }) => {
+          return !isValid ? (
+            <View>
+              <Text style={{ color: 'pink' }}>
+                Custom message component : {content}
+              </Text>
+            </View>
+          ) : null;
+        }}
+        LabelProps={{ content: 'Email from 2nd' }}
+        CustomMsgProps={{ content: 'Message from 2nd' }}
+        shouldValidate
+        validation={Validation}
+        LeftIcon={() => (
+          <MaterialIcons name='email' size={24} color='#c4c4c4' />
+        )}
+      />
 
       <Password
         {...passwordProps}
         show
-        Label={() => <LabelComponent content="Password with custom icons" />}
-        VisibleIcon={<AntDesign name="eye" size={24} color="black" />}
-        NotVisibleIcon={<Feather name="eye-off" size={24} color="black" />}
-      />
-
-      {/* Password with default icons */}
-      <Password
-        Label={() => <LabelComponent content="Password with default icons" />}
-        {...passwordProps}
-        show
-      />
-
-      {/* Password with no icons */}
-      <Password
-        Label={() => <LabelComponent content="Password with no icons" />}
-        {...passwordProps}
+        LabelComponent={() => (
+          <LabelComponent content='Password with custom icons' />
+        )}
+        VisibleIcon={<AntDesign name='eye' size={24} color='black' />}
+        NotVisibleIcon={<Feather name='eye-off' size={24} color='black' />}
       />
     </ThemeProvider>
   );
