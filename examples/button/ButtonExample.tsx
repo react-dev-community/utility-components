@@ -1,7 +1,8 @@
 import React from "react";
 import { Container } from "../../src";
 import Button from "../../src/components/Button";
-// import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Image } from "react-native";
 
 export default () => {
   return (
@@ -12,7 +13,12 @@ export default () => {
         color="yellow"
         rounded={5}
         onPress={console.log}
-        startIcon="account"
+        startIcon={
+          <MaterialCommunityIcons name="account" color="black"/>
+          // <Image
+          //   source={require('../../assets/icon.png')}
+          // />
+        }
       />
     </Container>
   );

@@ -7,10 +7,12 @@ import {
   TouchableHighlight,
   ButtonProps,
   ViewStyle,
+  Image
 } from 'react-native';
 import { Container } from '..';
 import Txt from '../Txt';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+// import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Icon } from "@expo/vector-icons/build/createIconSet"
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -19,8 +21,14 @@ interface Props
     Omit<ButtonProps, 'onPress' | 'disabled'> {
   mode?: 'text' | 'outlined' | 'contained';
   rounded?: number;
-  startIcon?: string;
-  endIcon?: string;
+  startIcon?: JSX.Element | Image;
+  endIcon?: JSX.Element | Image;
+}
+
+const addStyleToIcon = (el: JSX.Element | Image | undefined) : JSX.Element | Image | undefined => {
+  if (!el || !el.props.source)
+    return el;
+  return <Image {...el.props} style = {{ height: 24, width: 24 }} />
 }
 
 const Button: React.FC<Props> = ({ mode, ...props }) => {
@@ -73,27 +81,9 @@ const Button: React.FC<Props> = ({ mode, ...props }) => {
         style={{ ...(props.style as {}), ...ButtonStyle }}
         direction="row"
       >
-        {props.startIcon && (
-          <MaterialCommunityIcons
-            name={props.startIcon}
-            size={24}
-            color={textColor.toString()}
-            // style={{
-            //   paddingRight: ButtonStyle.paddingHorizontal,
-            // }}
-          />
-        )}
-        <Txt style={{ color: textColor }}>{props.title}</Txt>
-        {props.endIcon && (
-          <MaterialCommunityIcons
-            name={props.endIcon}
-            size={24}
-            color={textColor.toString()}
-            // style={{
-            //   paddingLeft: ButtonStyle.paddingHorizontal,
-            // }}
-          />
-        )}
+        {addStyleToIcon(props.startIcon)}
+        <Txt style={{ color: textColor, marginHorizontal: 5 }}>{props.title}</Txt>
+        {addStyleToIcon(props.endIcon)}
       </Container>
     </TouchableHighlight>
   );
